@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HarvestHub — Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/admin.css">
+</head>
+<body>
+
+<div id="login-screen">
+    <div class="login-card">
+        <div class="login-logo">
+            <svg width="38" height="38" viewBox="0 0 36 36" fill="none">
+                <path d="M6 24 Q10 14 18 16 Q26 18 30 12" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <circle cx="12" cy="26" r="3" fill="#ffc107"/>
+                <circle cx="24" cy="24" r="3" fill="#ffc107"/>
+                <rect x="8" y="18" width="20" height="6" rx="2" fill="rgba(255,255,255,0.25)" stroke="#fff" stroke-width="1.2"/>
+            </svg>
+        </div>
+        <h1>HarvestHub</h1>
+        <span class="login-subtitle">Admin Portal</span>
+        <div class="login-badge">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V4L8 1z" stroke="currentColor" stroke-width="1.5"/></svg>
+            ADMIN ACCESS ONLY
+        </div>
+        <input class="login-field" type="email" id="loginUsername" placeholder="Admin Email" autocomplete="email">
+        <input class="login-field" type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+        <button class="login-btn" onclick="doLogin()">Log In</button>
+        <div class="login-error" id="loginError">Incorrect username or password.</div>
+        <div class="login-hint">Enter your admin email and password</div>
+    </div>
+</div>
+
+<div id="app">
+<header class="topnav">
+    <div class="topnav-brand">
+        <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+            <path d="M6 24 Q10 14 18 16 Q26 18 30 12" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <circle cx="12" cy="26" r="3" fill="#ffc107"/>
+            <circle cx="24" cy="24" r="3" fill="#ffc107"/>
+            <rect x="8" y="18" width="20" height="6" rx="2" fill="rgba(255,255,255,0.2)" stroke="#fff" stroke-width="1.2"/>
+        </svg>
+        <span class="brand-name">Harvester Rental Admin</span>
+    </div>
+    <div class="topnav-right">
+        <div class="profile-dropdown">
+            <button class="profile-btn" onclick="toggleProfileMenu()">
+                <div class="profile-avatar">A</div>
+                <span class="profile-name">Admin</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+            <div class="profile-menu" id="profileMenu">
+                <div class="profile-menu-header">
+                    <div class="profile-avatar-large">A</div>
+                    <div class="profile-info">
+                        <span class="profile-name-large">Administrator</span>
+                        <span class="profile-email">admin@harvesthub.com</span>
+                    </div>
+                </div>
+                <div class="profile-menu-divider"></div>
+                <button class="profile-menu-item" onclick="showPage('settings'); loadSettings();">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 2v2M9 14v2M2 9h2M14 9h2M3.93 3.93l1.41 1.41M12.66 12.66l1.41 1.41M3.93 14.07l1.41-1.41M12.66 5.34l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    Settings
+                </button>
+                <button class="profile-menu-item logout-item" onclick="doLogout()">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 16H3a1 1 0 01-1-1V3a1 1 0 011-1h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 13l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 9H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    Log Out
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+            <button class="sidebar-link active" id="nav-dashboard" onclick="showPage('dashboard'); loadDashboardStats();">
+                <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="10" y="1" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="1" y="10" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="10" y="10" width="7" height="7" rx="1.5" fill="currentColor"/></svg></span>
+                Dashboard
+            </button>
+            <button class="sidebar-link" id="nav-bookings" onclick="showPage('bookings'); loadBookings();">
+                <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M13 1v4M1 8h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                Bookings
+            </button>
+            <button class="sidebar-link" id="nav-harvesters" onclick="showPage('harvesters'); loadHarvesters();">
+                <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="5" cy="13" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="13" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 13V7l3-4h6l3 4v1h1a1 1 0 011 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                Harvesters
+            </button>
+            <button class="sidebar-link" id="nav-approvals" onclick="showPage('approvals'); loadPendingHarvesters();">
+                <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4 8-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/></svg></span>
+                Approvals
+                <span class="approval-badge" id="approval-count" style="display:none;">0</span>
+            </button>
+            <button class="sidebar-link" id="nav-customers" onclick="showPage('customers'); loadCustomers();">
+                <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 17c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                Customers
+            </button>
+        </nav>
+    </aside>
+
+    <div id="logout-overlay" class="logout-overlay"></div>
+
+    <main class="main">
+
+        <!-- DASHBOARD -->
+        <div class="page-section active" id="page-dashboard">
+            <section class="stat-cards">
+                <div class="stat-card">
+                    <div class="stat-icon green"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><rect x="2" y="4" width="24" height="20" rx="3" stroke="#2d7a2d" stroke-width="2"/><path d="M8 2v4M20 2v4M2 11h24" stroke="#2d7a2d" stroke-width="2" stroke-linecap="round"/><rect x="7" y="15" width="4" height="4" rx="1" fill="#2d7a2d"/><rect x="13" y="15" width="4" height="4" rx="1" fill="#2d7a2d"/></svg></div>
+                    <div class="stat-info"><span class="stat-label">Total Bookings</span><span class="stat-value" id="stat-total-bookings">-</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="9" cy="22" r="3" stroke="#e07b00" stroke-width="2"/><circle cx="21" cy="22" r="3" stroke="#e07b00" stroke-width="2"/><path d="M2 22V14l4-8h10l4 6v2h2a2 2 0 012 2v4" stroke="#e07b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="stat-info"><span class="stat-label">Active Rentals</span><span class="stat-value" id="stat-active-rentals">-</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green2"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="9" cy="22" r="3" stroke="#3a9a3a" stroke-width="2"/><circle cx="21" cy="22" r="3" stroke="#3a9a3a" stroke-width="2"/><path d="M2 22V14l4-8h10l4 6v2h2a2 2 0 012 2v4" stroke="#3a9a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="stat-info"><span class="stat-label">Harvesters Available</span><span class="stat-value" id="stat-available-harvesters">-</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon teal"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M8 4h4v4L10 10M16 4h4v4l-2 2" stroke="#2a8a7a" stroke-width="2" stroke-linecap="round"/><rect x="4" y="14" width="20" height="12" rx="2" stroke="#2a8a7a" stroke-width="2"/><path d="M10 19l2 2 6-4" stroke="#2a8a7a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="stat-info"><span class="stat-label">Upcoming Services</span><span class="stat-value" id="stat-upcoming-services">-</span></div>
+                </div>
+            </section>
+            <div class="tables-row">
+                <div class="table-panel">
+                    <div class="panel-header green-header"><h2>Current Rentals</h2></div>
+                    <table class="data-table">
+                        <thead><tr><th>Customer</th><th>Harvester</th><th>Location</th><th>Period</th></tr></thead>
+                        <tbody id="current-rentals-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="table-panel">
+                    <div class="panel-header dark-header"><h2>Upcoming Bookings</h2></div>
+                    <table class="data-table">
+                        <thead><tr><th>Customer</th><th>Harvester</th><th>Start</th><th>Duration</th></tr></thead>
+                        <tbody id="upcoming-bookings-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOOKINGS -->
+        <div class="page-section" id="page-bookings">
+            <div class="page-title-bar">
+                <div><h1 class="page-title">Bookings Management</h1><p class="page-subtitle">Track and manage all harvester rental bookings</p></div>
+                <button class="btn-primary" onclick="openNewBookingModal()">+ New Booking</button>
+            </div>
+            <div class="page-toolbar">
+                <div class="search-bar">
+                    <input type="text" id="bookingSearch" placeholder="Search bookings..." oninput="filterBookings()">
+                </div>
+                <div class="filters">
+                    <select id="bookingStatusFilter" onchange="filterBookings()">
+                        <option value="">All Status</option><option>Pending</option><option>Confirmed</option><option>Completed</option><option>Cancelled</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="full-table">
+                    <thead><tr><th>ID</th><th>Renter</th><th>Harvester</th><th>Location</th><th>Start</th><th>End</th><th>Cost</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="booking-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- APPROVALS -->
+        <div class="page-section" id="page-approvals">
+            <div class="page-title-bar">
+                <div><h1 class="page-title">Listing Approvals</h1><p class="page-subtitle">Review and approve harvester listings from the mobile app</p></div>
+            </div>
+            <div class="page-toolbar">
+                <div class="search-bar">
+                    <input type="text" id="approvalSearch" placeholder="Search pending listings..." oninput="filterApprovals()">
+                </div>
+                <div class="filters">
+                    <select id="approvalTypeFilter" onchange="filterApprovals()">
+                        <option>All Types</option><option>Combine Harvester</option><option>Rice Harvester</option><option>Corn Harvester</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fleet-stats">
+                <div class="fleet-stat-chip pending-chip"><span class="chip-dot"></span><span id="pending-count">0 Pending</span></div>
+                <div class="fleet-stat-chip approved-chip"><span class="chip-dot"></span><span id="approved-count">0 Approved Today</span></div>
+                <div class="fleet-stat-chip rejected-chip"><span class="chip-dot"></span><span id="rejected-count">0 Rejected Today</span></div>
+            </div>
+            <div class="harvester-grid" id="approval-grid"></div>
+            <div class="empty-state" id="approval-empty" style="display:none;">
+                <h3>No Pending Listings</h3>
+                <p>All harvester listings have been reviewed.</p>
+            </div>
+            <div class="loading-state" id="approval-loading" style="display:none;">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+        </div>
+
+        <!-- HARVESTERS -->
+        <div class="page-section" id="page-harvesters">
+            <div class="page-title-bar">
+                <div><h1 class="page-title">Harvester Fleet Management</h1><p class="page-subtitle">Manage and monitor your entire harvester fleet</p></div>
+                <button class="btn-primary" onclick="openNewHarvesterModal()">+ Add New Harvester</button>
+            </div>
+            <div class="page-toolbar">
+                <div class="search-bar">
+                    <input type="text" id="harvesterSearch" placeholder="Search harvesters..." oninput="filterHarvesters()">
+                </div>
+                <div class="filters">
+                    <select id="harvesterTypeFilter" onchange="filterHarvesters()">
+                        <option value="">All Types</option><option>Combine Harvester</option><option>Rice Harvester</option><option>Corn Harvester</option>
+                    </select>
+                    <select id="harvesterStatusFilter" onchange="filterHarvesters()">
+                        <option value="">All Status</option><option>Available</option><option>Rented</option><option>Maintenance</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fleet-stats">
+                <div class="fleet-stat-chip available-chip"><span class="chip-dot"></span><span id="harvester-available">- Available</span></div>
+                <div class="fleet-stat-chip rented-chip"><span class="chip-dot"></span><span id="harvester-rented">- In Use</span></div>
+                <div class="fleet-stat-chip maintenance-chip"><span class="chip-dot"></span><span id="harvester-maintenance">- Maintenance</span></div>
+            </div>
+            <div class="harvester-grid" id="harvester-grid"></div>
+        </div>
+
+        <!-- CUSTOMERS -->
+        <div class="page-section" id="page-customers">
+            <div class="page-title-bar">
+                <div><h1 class="page-title">Customer Management</h1><p class="page-subtitle">View and manage all registered customers</p></div>
+                <button class="btn-primary" onclick="openNewCustomerModal()">+ Add New User</button>
+            </div>
+            <div class="page-toolbar">
+                <div class="search-bar">
+                    <input type="text" id="customerSearch" placeholder="Search users..." oninput="filterCustomers()">
+                </div>
+                <div class="filters">
+                    <select id="customerTypeFilter" onchange="filterCustomers()">
+                        <option value="">All Types</option><option>Renter</option><option>Owner</option><option>Admin</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="full-table">
+                    <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Type</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="customer-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div class="page-section" id="page-settings">
+            <div class="page-title-bar"><div><h1 class="page-title">Settings</h1><p class="page-subtitle">Configure platform preferences</p></div></div>
+            
+            <div class="settings-layout" style="display:block;padding:20px;">
+                
+                <!-- General Settings -->
+                <div class="settings-section" style="margin-bottom:40px;">
+                    <div class="section-header" style="margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #2d7a2d;">
+                        <h2 style="font-size:1.3rem;color:#1a3a1a;margin:0;">General Settings</h2>
+                        <p style="color:#666;font-size:0.9rem;margin:5px 0 0;">Basic platform configuration and contact information</p>
+                    </div>
+                    <div class="settings-group" style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Platform Name</label>
+                            <input type="text" id="setting-platform-name" value="Harvester Booking Platform" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Support Email</label>
+                            <input type="email" id="setting-support-email" value="support@harvester.com" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Contact Phone</label>
+                            <input type="tel" id="setting-contact-phone" value="+63 2 1234 5678" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Business Hours</label>
+                            <input type="text" id="setting-business-hours" value="Monday - Saturday, 8:00 AM - 6:00 PM" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Settings -->
+                <div class="settings-section" style="margin-bottom:40px;">
+                    <div class="section-header" style="margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #e07b00;">
+                        <h2 style="font-size:1.3rem;color:#1a3a1a;margin:0;">Booking Settings</h2>
+                        <p style="color:#666;font-size:0.9rem;margin:5px 0 0;">Control how bookings are created and managed</p>
+                    </div>
+                    <div class="settings-group" style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Minimum Booking Duration (days)</label>
+                            <input type="number" id="setting-min-duration" value="1" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Maximum Booking Duration (days)</label>
+                            <input type="number" id="setting-max-duration" value="30" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Advance Booking Period (days)</label>
+                            <input type="number" id="setting-advance-booking" value="60" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Cancellation Period (hours)</label>
+                            <input type="number" id="setting-cancellation-period" value="24" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Settings -->
+                <div class="settings-section" style="margin-bottom:40px;">
+                    <div class="section-header" style="margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #2a8a7a;">
+                        <h2 style="font-size:1.3rem;color:#1a3a1a;margin:0;">Payment Settings</h2>
+                        <p style="color:#666;font-size:0.9rem;margin:5px 0 0;">Configure accepted payment methods and fee structures</p>
+                    </div>
+                    <div class="settings-group" style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Currency</label>
+                            <select id="setting-currency" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                                <option selected>PHP (₱)</option>
+                                <option>USD ($)</option>
+                                <option>EUR (€)</option>
+                            </select>
+                        </div>
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Platform Fee (%)</label>
+                            <input type="number" id="setting-platform-fee" value="10" step="0.1" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Security Deposit (%)</label>
+                            <input type="number" id="setting-security-deposit" value="20" step="0.1" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Settings -->
+                <div class="settings-section" style="margin-bottom:40px;">
+                    <div class="section-header" style="margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #666;">
+                        <h2 style="font-size:1.3rem;color:#1a3a1a;margin:0;">System Settings</h2>
+                        <p style="color:#666;font-size:0.9rem;margin:5px 0 0;">Regional and system-level preferences</p>
+                    </div>
+                    <div class="settings-group" style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Timezone</label>
+                            <select id="setting-timezone" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                                <option selected>Asia/Manila (GMT+8)</option>
+                                <option>UTC</option>
+                                <option>Asia/Tokyo</option>
+                            </select>
+                        </div>
+                        <div class="setting-item half" style="padding:15px;background:#f9f9f9;border-radius:8px;">
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Date Format</label>
+                            <select id="setting-date-format" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+                                <option selected>MM/DD/YYYY</option>
+                                <option>DD/MM/YYYY</option>
+                                <option>YYYY-MM-DD</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div class="settings-actions" style="margin-top:30px;padding-top:20px;border-top:1px solid #ddd;display:flex;gap:15px;justify-content:flex-end;">
+                    <button class="btn-secondary" onclick="resetSettings()" style="padding:12px 24px;background:#6c757d;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:1rem;">Reset to Defaults</button>
+                    <button class="btn-primary" onclick="saveSettings()" style="padding:12px 24px;background:#2d7a2d;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:1rem;">Save All Changes</button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+</div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="bookingViewModal" onclick="closeModalOnOverlay(event,'bookingViewModal')">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="bmv-id">Booking Details</h3>
+            <button class="modal-close" onclick="closeModal('bookingViewModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-fields-grid">
+                <div class="modal-field"><label>Renter</label><div class="modal-val" id="bmv-renter"></div></div>
+                <div class="modal-field"><label>Harvester</label><div class="modal-val" id="bmv-harvester"></div></div>
+                <div class="modal-field"><label>Location</label><div class="modal-val" id="bmv-location"></div></div>
+                <div class="modal-field"><label>Cost</label><div class="modal-val" id="bmv-cost"></div></div>
+                <div class="modal-field"><label>Status</label><div class="modal-status-row"><span class="modal-status-label" id="bmv-status-label">Pending</span></div></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('bookingViewModal')">Close</button>
+            <button class="btn-approve-modal" onclick="updateBookingStatus('confirmed')">Approve</button>
+            <button class="btn-reject-modal" onclick="updateBookingStatus('cancelled')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="newBookingModal" onclick="closeModalOnOverlay(event,'newBookingModal')">
+    <div class="modal-box">
+        <div class="modal-header"><h3>New Booking</h3><button class="modal-close" onclick="closeModal('newBookingModal')">×</button></div>
+        <div class="modal-body">
+            <div class="modal-fields-grid">
+                <div class="modal-field"><label>Renter</label><select id="nb-renter"></select></div>
+                <div class="modal-field"><label>Harvester</label><select id="nb-harvester"></select></div>
+                <div class="modal-field"><label>Location</label><input id="nb-location" type="text"></div>
+                <div class="modal-field"><label>Start Date</label><input id="nb-start" type="date"></div>
+                <div class="modal-field"><label>End Date</label><input id="nb-end" type="date"></div>
+                <div class="modal-field"><label>Cost (₱)</label><input id="nb-cost" type="number"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('newBookingModal')">Cancel</button>
+            <button class="btn-approve-modal" onclick="createBooking()">Create</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="harvesterEditModal" onclick="closeModalOnOverlay(event,'harvesterEditModal')">
+    <div class="modal-box">
+        <div class="modal-header"><h3 id="hem-title">Edit Harvester</h3><button class="modal-close" onclick="closeModal('harvesterEditModal')">×</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="hem-doc-id">
+            <div class="modal-fields-grid">
+                <div class="modal-field"><label>Name</label><input id="hem-name" type="text"></div>
+                <div class="modal-field"><label>Type</label><select id="hem-type"><option>Combine Harvester</option><option>Rice Harvester</option><option>Corn Harvester</option></select></div>
+                <div class="modal-field"><label>Year</label><input id="hem-year" type="number"></div>
+                <div class="modal-field"><label>Capacity</label><input id="hem-capacity" type="text"></div>
+                <div class="modal-field"><label>Rate (₱)</label><input id="hem-rate" type="text"></div>
+                <div class="modal-field"><label>Location</label><input id="hem-location" type="text"></div>
+                <div class="modal-field"><label>Owner</label><input id="hem-owner" type="text"></div>
+                <div class="modal-field"><label>Status</label><select id="hem-status"><option value="available">Available</option><option value="rented">Rented</option><option value="maintenance">Maintenance</option></select></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('harvesterEditModal')">Cancel</button>
+            <button class="btn-reject-modal" id="hem-delete-btn" onclick="deleteHarvester()" style="display:none;">Delete</button>
+            <button class="btn-approve-modal" onclick="saveHarvester()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="customerEditModal" onclick="closeModalOnOverlay(event,'customerEditModal')">
+    <div class="modal-box">
+        <div class="modal-header"><h3 id="cem-title">Edit Customer</h3><button class="modal-close" onclick="closeModal('customerEditModal')">×</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="cem-doc-id">
+            <div class="modal-fields-grid">
+                <div class="modal-field"><label>Name</label><input id="cem-name" type="text"></div>
+                <div class="modal-field"><label>Email</label><input id="cem-email" type="email"></div>
+                <div class="modal-field"><label>Phone</label><input id="cem-phone" type="tel"></div>
+                <div class="modal-field"><label>Location</label><input id="cem-location" type="text"></div>
+                <div class="modal-field"><label>Type</label><select id="cem-type"><option>Renter</option><option>Owner</option><option>Admin</option></select></div>
+                <div class="modal-field"><label>Status</label><select id="cem-status"><option>Active</option><option>Inactive</option></select></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('customerEditModal')">Cancel</button>
+            <button class="btn-approve-modal" onclick="saveCustomer()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="rejectionModal" onclick="closeModalOnOverlay(event,'rejectionModal')">
+    <div class="modal-box">
+        <div class="modal-header"><h3>Reject Listing</h3><button class="modal-close" onclick="closeModal('rejectionModal')">×</button></div>
+        <div class="modal-body">
+            <div class="modal-field"><label>Reason</label><textarea id="rejection-reason" rows="4" placeholder="Enter reason"></textarea></div>
+            <input type="hidden" id="rejection-harvester-id">
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('rejectionModal')">Cancel</button>
+            <button class="btn-reject-modal" onclick="confirmReject()">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
+import { getFirestore, collection, query, where, getDocs, updateDoc, doc, deleteDoc, addDoc, orderBy } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDE4oLipbxiVtb4PtTVdcXsQaJO6wxSkF0",
+    authDomain: "harvesthub-25071.firebaseapp.com",
+    projectId: "harvesthub-25071",
+    storageBucket: "harvesthub-25071.firebasestorage.app",
+    messagingSenderId: "727328652891",
+    appId: "1:727328652891:web:76b8fe7fe3f55c5040097e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// ============ CLOUDINARY CONFIGURATION ============
+const CLOUDINARY_CLOUD_NAME = 'ddgbttfxs';
+
+// Generate Cloudinary image URL with transformations
+function getCloudinaryImage(folder, publicId, options = {}) {
+    const { width = 400, height = 300, crop = 'fill' } = options;
+    
+    // If no publicId provided, return placeholder
+    if (!publicId) {
+        return getPlaceholderImage(folder);
+    }
+    
+    // Build transformation string
+    const transformations = [
+        `w_${width}`,
+        `h_${height}`,
+        `c_${crop}`,
+        `q_auto`,
+        `f_auto`
+    ].join(',');
+    
+    return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${transformations}/${folder}/${publicId}`;
+}
+
+// Get placeholder image based on folder type
+function getPlaceholderImage(folder) {
+    if (folder === 'harvesters') {
+        return 'https://res.cloudinary.com/ddgbttfxs/image/upload/w_400,h_300,c_fill,q_auto,f_auto/v1/harvesters/placeholder-harvester.jpg';
+    } else if (folder === 'avatars') {
+        return 'https://via.placeholder.com/150/4a7a2d/ffffff?text=User';
+    }
+    return '';
+}
+
+// Get user avatar from Cloudinary or generate initials
+function getUserAvatar(userData, size = 40) {
+    // Check if user has a Cloudinary avatar URL stored
+    if (userData.avatarUrl) {
+        return userData.avatarUrl;
+    }
+    
+    // Check if user has a public_id stored from Cloudinary
+    if (userData.avatarPublicId) {
+        return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/w_${size},h_${size},c_fill,q_auto,f_auto/avatars/${userData.avatarPublicId}`;
+    }
+    
+    // Generate initials avatar
+    const initials = (userData.name || 'U').charAt(0).toUpperCase();
+    const colors = ['2d7a2d', 'e07b00', '2a8a7a', '6c757d', 'dc3545'];
+    const colorIndex = (userData.id || '').charCodeAt(0) % colors.length;
+    
+    return `https://via.placeholder.com/${size}/${colors[colorIndex]}/ffffff?text=${initials}`;
+}
+
+// Predefined harvester images (sample public IDs - replace with actual uploaded images)
+const HARVESTER_IMAGES = {
+    'Combine Harvester': 'combine-harvester-1',
+    'Rice Harvester': 'rice-harvester-1', 
+    'Corn Harvester': 'corn-harvester-1'
+};
+
+function getHarvesterImageUrl(harvesterData) {
+    // Check if harvester has a Cloudinary image stored
+    if (harvesterData.imageUrl) {
+        return harvesterData.imageUrl;
+    }
+    
+    if (harvesterData.imagePublicId) {
+        return getCloudinaryImage('harvesters', harvesterData.imagePublicId, { width: 400, height: 250 });
+    }
+    
+    // Use predefined images based on type
+    const typeKey = harvesterData.type || 'Combine Harvester';
+    const publicId = HARVESTER_IMAGES[typeKey];
+    
+    if (publicId) {
+        return getCloudinaryImage('harvesters', publicId, { width: 400, height: 250 });
+    }
+    
+    // Fallback placeholder
+    return getCloudinaryImage('harvesters', 'harvester-placeholder', { width: 400, height: 250 });
+}
+
+let allBookings = [], allHarvesters = [], allCustomers = [], pendingHarvesters = [];
+let currentBookingId = null;
+
+const ADMIN_UID = '3YLY0Mg1fxU1kV5f2TZzZm9ga1h2';
+
+document.getElementById('login-screen').style.display = 'none';
+document.getElementById('app').style.display = 'none';
+
+onAuthStateChanged(auth, user => {
+    if (user && user.uid === ADMIN_UID) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        loadDashboardStats();
+    } else {
+        if (user) signOut(auth);
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+    }
+});
+
+window.doLogin = async function() {
+    const email = document.getElementById('loginUsername').value.trim();
+    const pass = document.getElementById('loginPassword').value;
+    const err = document.getElementById('loginError');
+    const btn = document.querySelector('.login-btn');
+    if (!email || !pass) { err.textContent = 'Please enter email and password.'; err.style.display = 'block'; return; }
+    btn.textContent = 'Logging in...'; btn.disabled = true;
+    try {
+        const cred = await signInWithEmailAndPassword(auth, email, pass);
+        if (cred.user.uid !== ADMIN_UID) { await signOut(auth); err.textContent = 'Access denied.'; err.style.display = 'block'; }
+    } catch (e) { err.textContent = 'Login failed.'; err.style.display = 'block'; }
+    btn.textContent = 'Log In'; btn.disabled = false;
+};
+
+window.doLogout = async function() {
+    const o = document.getElementById('logout-overlay');
+    o.classList.add('active');
+    await new Promise(r => setTimeout(r, 800));
+    await signOut(auth);
+    o.classList.remove('active');
+};
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') window.doLogin(); });
+
+window.showPage = function(page) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('nav-' + page).classList.add('active');
+};
+
+// Profile Dropdown
+window.toggleProfileMenu = function() {
+    const menu = document.getElementById('profileMenu');
+    menu.classList.toggle('show');
+};
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const dropdown = document.querySelector('.profile-dropdown');
+    const menu = document.getElementById('profileMenu');
+    if (dropdown && !dropdown.contains(e.target)) {
+        menu.classList.remove('show');
+    }
+});
+
+// Dashboard Stats
+window.loadDashboardStats = async function() {
+    try {
+        const bsnap = await getDocs(collection(db, 'bookings'));
+        document.getElementById('stat-total-bookings').textContent = bsnap.size;
+        
+        let active = 0, upcoming = 0;
+        const today = new Date();
+        bsnap.forEach(d => {
+            const b = d.data();
+            if (b.status === 'confirmed') {
+                const s = new Date(b.startDate), e = new Date(b.endDate);
+                if (today >= s && today <= e) active++;
+            }
+            if ((b.status === 'confirmed' || b.status === 'pending') && new Date(b.startDate) > today) upcoming++;
+        });
+        document.getElementById('stat-active-rentals').textContent = active;
+        document.getElementById('stat-upcoming-services').textContent = upcoming;
+        
+        const hsnap = await getDocs(query(collection(db, 'harvesters'), where('status', '==', 'available')));
+        document.getElementById('stat-available-harvesters').textContent = hsnap.size;
+        
+        loadCurrentRentals();
+        loadUpcomingBookings();
+    } catch (e) { console.error(e); }
+};
+
+async function loadCurrentRentals() {
+    const tb = document.getElementById('current-rentals-tbody');
+    try {
+        const snap = await getDocs(query(collection(db, 'bookings'), where('status', '==', 'confirmed')));
+        const today = new Date();
+        let html = '', c = 0;
+        snap.forEach(d => {
+            const b = d.data();
+            const s = new Date(b.startDate), e = new Date(b.endDate);
+            if (today >= s && today <= e && c < 5) {
+                html += `<tr><td>${b.renterName || '-'}</td><td>${b.harvesterName || '-'}</td><td>${b.location || '-'}</td><td>${fmtDate(s)} - ${fmtDate(e)}</td></tr>`;
+                c++;
+            }
+        });
+        tb.innerHTML = html || '<tr><td colspan="4" style="text-align:center">No active rentals</td></tr>';
+    } catch (e) { tb.innerHTML = '<tr><td colspan="4">Error</td></tr>'; }
+}
+
+async function loadUpcomingBookings() {
+    const tb = document.getElementById('upcoming-bookings-tbody');
+    try {
+        const snap = await getDocs(query(collection(db, 'bookings'), orderBy('startDate', 'asc')));
+        const today = new Date();
+        let html = '', c = 0;
+        snap.forEach(d => {
+            const b = d.data();
+            const s = new Date(b.startDate);
+            if (s > today && (b.status === 'confirmed' || b.status === 'pending') && c < 5) {
+                const e = new Date(b.endDate);
+                const days = Math.ceil((e - s) / (1000*60*60*24));
+                html += `<tr><td>${b.renterName || '-'}</td><td>${b.harvesterName || '-'}</td><td>${fmtDate(s)}</td><td>${days} days</td></tr>`;
+                c++;
+            }
+        });
+        tb.innerHTML = html || '<tr><td colspan="4" style="text-align:center">No upcoming</td></tr>';
+    } catch (e) { tb.innerHTML = '<tr><td colspan="4">Error</td></tr>'; }
+}
+
+// Bookings
+window.loadBookings = async function() {
+    const tb = document.getElementById('booking-tbody');
+    tb.innerHTML = '<tr><td colspan="9">Loading...</td></tr>';
+    try {
+        allBookings = [];
+        const snap = await getDocs(query(collection(db, 'bookings'), orderBy('createdAt', 'desc')));
+        snap.forEach(d => allBookings.push({ id: d.id, ...d.data() }));
+        renderBookings();
+    } catch (e) { tb.innerHTML = '<tr><td colspan="9">Error loading</td></tr>'; }
+};
+
+function renderBookings() {
+    const tb = document.getElementById('booking-tbody');
+    const sq = (document.getElementById('bookingSearch')?.value || '').toLowerCase();
+    const sf = document.getElementById('bookingStatusFilter')?.value || '';
+    let filtered = allBookings.filter(b => {
+        let m = `${b.id} ${b.renterName || ''} ${b.harvesterName || ''}`.toLowerCase().includes(sq);
+        if (m && sf) m = b.status === sf;
+        return m;
+    });
+    if (!filtered.length) { tb.innerHTML = '<tr><td colspan="9">No bookings found</td></tr>'; return; }
+    tb.innerHTML = filtered.map(b => {
+        const s = new Date(b.startDate), e = new Date(b.endDate);
+        return `<tr>
+            <td>${b.id.substring(0,8)}</td>
+            <td>${b.renterName || '-'}</td>
+            <td>${b.harvesterName || '-'}</td>
+            <td>${b.location || '-'}</td>
+            <td>${fmtDate(s)}</td>
+            <td>${fmtDate(e)}</td>
+            <td>₱${b.totalCost || 0}</td>
+            <td><span class="badge ${b.status}">${cap(b.status)}</span></td>
+            <td><button class="btn-action" onclick="viewBooking('${b.id}')">View</button></td>
+        </tr>`;
+    }).join('');
+}
+
+window.filterBookings = renderBookings;
+
+window.viewBooking = function(id) {
+    const b = allBookings.find(x => x.id === id);
+    if (!b) return;
+    currentBookingId = id;
+    document.getElementById('bmv-id').textContent = 'Booking ' + id.substring(0,8);
+    document.getElementById('bmv-renter').textContent = b.renterName || '-';
+    document.getElementById('bmv-harvester').textContent = b.harvesterName || '-';
+    document.getElementById('bmv-location').textContent = b.location || '-';
+    document.getElementById('bmv-cost').textContent = '₱' + (b.totalCost || 0);
+    document.getElementById('bmv-status-label').textContent = cap(b.status);
+    document.getElementById('bmv-status-label').className = 'modal-status-label ' + b.status;
+    openModal('bookingViewModal');
+};
+
+window.updateBookingStatus = async function(status) {
+    if (!currentBookingId) return;
+    try {
+        await updateDoc(doc(db, 'bookings', currentBookingId), { status, updatedAt: new Date().toISOString() });
+        showToast('Booking ' + status);
+        closeModal('bookingViewModal');
+        loadBookings();
+        loadDashboardStats();
+    } catch (e) { showToast('Error', 'error'); }
+};
+
+window.openNewBookingModal = async function() {
+    const rs = document.getElementById('nb-renter'), hs = document.getElementById('nb-harvester');
+    const csnap = await getDocs(collection(db, 'users'));
+    let ch = '<option value="">Select Renter</option>';
+    csnap.forEach(d => ch += `<option value="${d.id}">${d.data().name || d.id}</option>`);
+    rs.innerHTML = ch;
+    const hsnap = await getDocs(query(collection(db, 'harvesters'), where('status', '==', 'available')));
+    let hh = '<option value="">Select Harvester</option>';
+    hsnap.forEach(d => hh += `<option value="${d.id}" data-name="${d.data().name}">${d.data().name}</option>`);
+    hs.innerHTML = hh;
+    openModal('newBookingModal');
+};
+
+window.createBooking = async function() {
+    const rid = document.getElementById('nb-renter').value;
+    const hid = document.getElementById('nb-harvester').value;
+    if (!rid || !hid) { showToast('Fill all fields', 'error'); return; }
+    const hs = document.getElementById('nb-harvester');
+    const hname = hs.options[hs.selectedIndex].dataset.name;
+    try {
+        await addDoc(collection(db, 'bookings'), {
+            renterId: rid, renterName: rid,
+            harvesterId: hid, harvesterName: hname,
+            location: document.getElementById('nb-location').value,
+            startDate: document.getElementById('nb-start').value,
+            endDate: document.getElementById('nb-end').value,
+            totalCost: parseFloat(document.getElementById('nb-cost').value) || 0,
+            status: 'pending', createdAt: new Date().toISOString()
+        });
+        showToast('Booking created');
+        closeModal('newBookingModal');
+        loadBookings();
+        loadDashboardStats();
+    } catch (e) { showToast('Error', 'error'); }
+};
+
+// Harvesters
+window.loadHarvesters = async function() {
+    const grid = document.getElementById('harvester-grid');
+    try {
+        allHarvesters = [];
+        const snap = await getDocs(collection(db, 'harvesters'));
+        snap.forEach(d => allHarvesters.push({ id: d.id, ...d.data() }));
+        updateHarvesterStats();
+        renderHarvesters();
+    } catch (e) { console.error(e); }
+};
+
+function updateHarvesterStats() {
+    const a = allHarvesters.filter(h => h.status === 'available').length;
+    const r = allHarvesters.filter(h => h.status === 'rented').length;
+    const m = allHarvesters.filter(h => h.status === 'maintenance').length;
+    document.getElementById('harvester-available').textContent = a + ' Available';
+    document.getElementById('harvester-rented').textContent = r + ' In Use';
+    document.getElementById('harvester-maintenance').textContent = m + ' Maintenance';
+}
+
+function renderHarvesters() {
+    const grid = document.getElementById('harvester-grid');
+    const sq = (document.getElementById('harvesterSearch')?.value || '').toLowerCase();
+    const tf = document.getElementById('harvesterTypeFilter')?.value || '';
+    const sf = document.getElementById('harvesterStatusFilter')?.value || '';
+    let filtered = allHarvesters.filter(h => {
+        let m = `${h.name || ''} ${h.type || ''}`.toLowerCase().includes(sq);
+        if (m && tf) m = h.type === tf;
+        if (m && sf) m = h.status === sf;
+        return m;
+    });
+    if (!filtered.length) { grid.innerHTML = '<div class="empty-state"><h3>No Harvesters</h3></div>'; return; }
+    grid.innerHTML = filtered.map(h => {
+        const imageUrl = getHarvesterImageUrl(h);
+        return `<div class="harvester-card">
+        <div class="harvester-image" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;">
+            <span class="status-badge ${h.status || 'available'}">${cap(h.status)}</span>
+        </div>
+        <div class="harvester-info">
+            <h3>${h.name || 'Unknown'}</h3>
+            <p class="harvester-type">${h.type || '-'}</p>
+            <div class="specs">
+                <div class="spec-item"><span class="spec-label">ID</span><span class="spec-value">${h.id.substring(0,8)}</span></div>
+                <div class="spec-item"><span class="spec-label">Rate</span><span class="spec-value">₱${h.rate || 0}/day</span></div>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action" onclick="editHarvester('${h.id}')">Edit</button>
+            </div>
+        </div>
+    </div>`;
+    }).join('');
+}
+
+window.filterHarvesters = renderHarvesters;
+
+window.openNewHarvesterModal = function() {
+    document.getElementById('hem-title').textContent = 'Add Harvester';
+    document.getElementById('hem-doc-id').value = '';
+    ['hem-name','hem-year','hem-capacity','hem-rate','hem-location','hem-owner'].forEach(id => document.getElementById(id).value = '');
+    setSelect('hem-type', 'Combine Harvester');
+    setSelect('hem-status', 'available');
+    document.getElementById('hem-delete-btn').style.display = 'none';
+    openModal('harvesterEditModal');
+};
+
+window.editHarvester = function(id) {
+    const h = allHarvesters.find(x => x.id === id);
+    if (!h) return;
+    document.getElementById('hem-title').textContent = 'Edit Harvester';
+    document.getElementById('hem-doc-id').value = id;
+    document.getElementById('hem-name').value = h.name || '';
+    document.getElementById('hem-year').value = h.year || '';
+    document.getElementById('hem-capacity').value = h.capacity || '';
+    document.getElementById('hem-rate').value = h.rate || '';
+    document.getElementById('hem-location').value = h.location || '';
+    document.getElementById('hem-owner').value = h.ownerName || '';
+    setSelect('hem-type', h.type || 'Combine Harvester');
+    setSelect('hem-status', h.status || 'available');
+    document.getElementById('hem-delete-btn').style.display = 'inline-flex';
+    openModal('harvesterEditModal');
+};
+
+window.saveHarvester = async function() {
+    const id = document.getElementById('hem-doc-id').value;
+    const data = {
+        name: document.getElementById('hem-name').value,
+        type: document.getElementById('hem-type').value,
+        year: document.getElementById('hem-year').value,
+        capacity: document.getElementById('hem-capacity').value,
+        rate: document.getElementById('hem-rate').value,
+        location: document.getElementById('hem-location').value,
+        ownerName: document.getElementById('hem-owner').value,
+        status: document.getElementById('hem-status').value,
+        updatedAt: new Date().toISOString()
+    };
+    if (!data.name) { showToast('Name required', 'error'); return; }
+    try {
+        if (id) { await updateDoc(doc(db, 'harvesters', id), data); showToast('Updated'); }
+        else { await addDoc(collection(db, 'harvesters'), { ...data, createdAt: new Date().toISOString() }); showToast('Created'); }
+        closeModal('harvesterEditModal');
+        loadHarvesters();
+        loadDashboardStats();
+    } catch (e) { showToast('Error', 'error'); }
+};
+
+window.deleteHarvester = async function() {
+    const id = document.getElementById('hem-doc-id').value;
+    if (!id || !confirm('Delete this harvester?')) return;
+    try {
+        await deleteDoc(doc(db, 'harvesters', id));
+        showToast('Deleted');
+        closeModal('harvesterEditModal');
+        loadHarvesters();
+        loadDashboardStats();
+    } catch (e) { showToast('Error', 'error'); }
+};
+
+// Pending Harvesters (Approvals)
+window.loadPendingHarvesters = async function() {
+    const grid = document.getElementById('approval-grid');
+    const loading = document.getElementById('approval-loading');
+    const empty = document.getElementById('approval-empty');
+    loading.style.display = 'block'; empty.style.display = 'none'; grid.innerHTML = '';
+    try {
+        const snap = await getDocs(query(collection(db, 'harvesters'), where('status', '==', 'pending')));
+        pendingHarvesters = [];
+        snap.forEach(d => pendingHarvesters.push({ id: d.id, ...d.data() }));
+        updateApprovalCounts();
+        renderPendingHarvesters();
+    } catch (e) { console.error(e); }
+    loading.style.display = 'none';
+};
+
+function renderPendingHarvesters() {
+    const grid = document.getElementById('approval-grid');
+    const empty = document.getElementById('approval-empty');
+    const sq = (document.getElementById('approvalSearch')?.value || '').toLowerCase();
+    const tf = document.getElementById('approvalTypeFilter')?.value || '';
+    let filtered = pendingHarvesters.filter(h => {
+        let m = `${h.name || ''} ${h.type || ''}`.toLowerCase().includes(sq);
+        if (m && tf !== 'All Types') m = h.type === tf;
+        return m;
+    });
+    if (!filtered.length) { empty.style.display = 'flex'; grid.innerHTML = ''; return; }
+    empty.style.display = 'none';
+    grid.innerHTML = filtered.map(h => {
+        const imageUrl = getHarvesterImageUrl(h);
+        return `<div class="harvester-card">
+        <div class="harvester-image" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;">
+            <span class="status-badge pending">Pending</span>
+        </div>
+        <div class="harvester-info">
+            <h3>${h.name || 'Unknown'}</h3>
+            <p class="harvester-type">${h.type || '-'}</p>
+            <div class="specs">
+                <div class="spec-item"><span class="spec-label">ID</span><span class="spec-value">${h.id.substring(0,8)}</span></div>
+                <div class="spec-item"><span class="spec-label">Rate</span><span class="spec-value">₱${h.rate || 0}/day</span></div>
+            </div>
+            <div class="card-actions" style="display:flex;gap:8px;margin-top:12px;">
+                <button class="btn-approve" onclick="approveHarvester('${h.id}')" style="flex:1;padding:10px;background:#2d7a2d;color:#fff;border:none;border-radius:6px;cursor:pointer;">Approve</button>
+                <button class="btn-reject" onclick="openRejectModal('${h.id}')" style="flex:1;padding:10px;background:#dc3545;color:#fff;border:none;border-radius:6px;cursor:pointer;">Reject</button>
+            </div>
+        </div>
+    </div>`;
+    }).join('');
+}
+
+window.filterApprovals = renderPendingHarvesters;
+
+window.approveHarvester = async function(id) {
+    try {
+        await updateDoc(doc(db, 'harvesters', id), { status: 'approved', approvedAt: new Date().toISOString(), approvedBy: 'admin' });
+        showToast('Approved!');
+        pendingHarvesters = pendingHarvesters.filter(h => h.id !== id);
+        updateApprovalCounts();
+        renderPendingHarvesters();
+        loadHarvesters();
+    } catch (e) { showToast('Error', 'error'); }
+};
+
+window.openRejectModal = function(id) {
+    document.getElementById('rejection-reason').value = '';
+    document.getElementById('rejection-harvester-id').value = id;
+    openModal('rejectionModal');
+};
+
+window.confirmReject = async function() {
+    const id = document.getElementById('rejection-harvester-id').value;
+    const reason = document.getElementById('rejection-reason').value.trim();
+    try {
+        await updateDoc(doc(db, 'harvesters', id), { status: 'rejected', rejectedAt: new Date().toISOString(), rejectionReason: reason || 'No reason' });
+        showToast('Rejected');
+        closeModal('rejectionModal');
+        pendingHarvesters = pendingHarvesters.filter(h => h.id !== id);
+        updateApprovalCounts();
+        renderPendingHarvesters();
+    } catch (e) { showToast('Error', 'error'); }
+};
+
+async function updateApprovalCounts() {
+    document.getElementById('pending-count').textContent = pendingHarvesters.length + ' Pending';
+    const badge = document.getElementById('approval-count');
+    if (badge) { badge.textContent = pendingHarvesters.length; badge.style.display = pendingHarvesters.length ? 'inline-flex' : 'none'; }
+    const today = new Date(); today.setHours(0,0,0,0);
+    let app = 0, rej = 0;
+    const asnap = await getDocs(query(collection(db, 'harvesters'), where('status', '==', 'approved')));
+    const rsnap = await getDocs(query(collection(db, 'harvesters'), where('status', '==', 'rejected')));
+    asnap.forEach(d => { const t = d.data().approvedAt; if (t && new Date(t).getTime() === today.getTime()) app++; });
+    rsnap.forEach(d => { const t = d.data().rejectedAt; if (t && new Date(t).getTime() === today.getTime()) rej++; });
+    document.getElementById('approved-count').textContent = app + ' Approved Today';
+    document.getElementById('rejected-count').textContent = rej + ' Rejected Today';
+}
+
+// Customers
+window.loadCustomers = async function() {
+    const tb = document.getElementById('customer-tbody');
+    try {
+        allCustomers = [];
+        const snap = await getDocs(collection(db, 'users'));
+        snap.forEach(d => allCustomers.push({ id: d.id, ...d.data() }));
+        renderCustomers();
+    } catch (e) { tb.innerHTML = '<tr><td colspan="8">Error</td></tr>'; }
+};
+
+function renderCustomers() {
+    const tb = document.getElementById('customer-tbody');
+    const sq = (document.getElementById('customerSearch')?.value || '').toLowerCase();
+    const tf = document.getElementById('customerTypeFilter')?.value || '';
+    let filtered = allCustomers.filter(c => {
+        let m = `${c.name || ''} ${c.email || ''}`.toLowerCase().includes(sq);
+        if (m && tf) m = c.userType === tf;
+        return m;
+    });
+    if (!filtered.length) { tb.innerHTML = '<tr><td colspan="8">No customers</td></tr>'; return; }
+    tb.innerHTML = filtered.map(c => {
+        const avatarUrl = getUserAvatar(c, 36);
+        return `<tr>
+        <td>${c.id.substring(0,8)}</td>
+        <td><div style="display:flex;align-items:center;gap:10px;"><img src="${avatarUrl}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">${c.name || '-'}</div></td>
+        <td>${c.email || '-'}</td>
+        <td>${c.phone || '-'}</td>
+        <td>${c.userType || 'Renter'}</td>
+        <td>${c.location || '-'}</td>
+        <td><span class="badge ${c.status || 'active'}">${cap(c.status)}</span></td>
+        <td><button class="btn-action" onclick="editCustomer('${c.id}')">Edit</button></td>
+    </tr>`;
+    }).join('');
+}
+
+window.filterCustomers = renderCustomers;
+
+window.openNewCustomerModal = function() {
+    document.getElementById('cem-title').textContent = 'Add Customer';
+    document.getElementById('cem-doc-id').value = '';
+    ['cem-name','cem-email','cem-phone','cem-location'].forEach(id => document.getElementById(id).value = '');
+    setSelect('cem-type', 'Renter');
+    setSelect('cem-status', 'Active');
+    openModal('customerEditModal');
+};
+
+window.editCustomer = function(id) {
+    const c = allCustomers.find(x => x.id === id);
+    if (!c) return;
+    document.getElementById('cem-title').textContent = 'Edit Customer';
+    document.getElementById('cem-doc-id').value = id;
+    document.getElementById('cem-name').value = c.name || '';
+    document.getElementById('cem-email').value = c.email || '';
+    document.getElementById('cem-phone').value = c.phone || '';
+    document.getElementById('cem-location').value = c.location || '';
+    setSelect('cem-type', c.userType || 'Renter');
+    setSelect('cem-status', c.status || 'Active');
+    openModal('customerEditModal');
+};
+
+window.saveCustomer = async function() {
+    const id = document.getElementById('cem-doc-id').value;
+    const data = {
+        name: document.getElementById('cem-name').value,
+        email: document.getElementById('cem-email').value,
+        phone: document.getElementById('cem-phone').value,
+        location: document.getElementById('cem-location').value,
+        userType: document.getElementById('cem-type').value,
+        status: document.getElementById('cem-status').value,
+        updatedAt: new Date().toISOString()
+    };
+    if (!data.name) { showToast('Name required', 'error'); return; }
+    try {
+        if (id) { await updateDoc(doc(db, 'users', id), data); showToast('Updated'); }
+        else { await addDoc(collection(db, 'users'), { ...data, createdAt: new Date().toISOString(), joinDate: new Date().toISOString() }); showToast('Created'); }
+        closeModal('customerEditModal');
+        loadCustomers();
+    } catch (e) { showToast('Error', 'error'); }
+};
+
+// Settings
+window.loadSettings = function() {
+    const s = JSON.parse(localStorage.getItem('harvesthub_settings') || '{}');
+    if (s.platformName) document.getElementById('setting-platform-name').value = s.platformName;
+    if (s.supportEmail) document.getElementById('setting-support-email').value = s.supportEmail;
+    if (s.contactPhone) document.getElementById('setting-contact-phone').value = s.contactPhone;
+    if (s.businessHours) document.getElementById('setting-business-hours').value = s.businessHours;
+    if (s.minDuration) document.getElementById('setting-min-duration').value = s.minDuration;
+    if (s.maxDuration) document.getElementById('setting-max-duration').value = s.maxDuration;
+    if (s.advanceBooking) document.getElementById('setting-advance-booking').value = s.advanceBooking;
+    if (s.cancellationPeriod) document.getElementById('setting-cancellation-period').value = s.cancellationPeriod;
+    if (s.platformFee) document.getElementById('setting-platform-fee').value = s.platformFee;
+    if (s.securityDeposit) document.getElementById('setting-security-deposit').value = s.securityDeposit;
+    setSelect('setting-currency', s.currency || 'PHP (₱)');
+    setSelect('setting-timezone', s.timezone || 'Asia/Manila (GMT+8)');
+    setSelect('setting-date-format', s.dateFormat || 'MM/DD/YYYY');
+};
+
+window.saveSettings = function() {
+    const s = {
+        platformName: document.getElementById('setting-platform-name').value,
+        supportEmail: document.getElementById('setting-support-email').value,
+        contactPhone: document.getElementById('setting-contact-phone').value,
+        businessHours: document.getElementById('setting-business-hours').value,
+        minDuration: document.getElementById('setting-min-duration').value,
+        maxDuration: document.getElementById('setting-max-duration').value,
+        advanceBooking: document.getElementById('setting-advance-booking').value,
+        cancellationPeriod: document.getElementById('setting-cancellation-period').value,
+        platformFee: document.getElementById('setting-platform-fee').value,
+        securityDeposit: document.getElementById('setting-security-deposit').value,
+        currency: document.getElementById('setting-currency').value,
+        timezone: document.getElementById('setting-timezone').value,
+        dateFormat: document.getElementById('setting-date-format').value
+    };
+    localStorage.setItem('harvesthub_settings', JSON.stringify(s));
+    showToast('Settings saved successfully');
+};
+
+window.resetSettings = function() {
+    if (confirm('Reset all settings?')) { localStorage.removeItem('harvesthub_settings'); location.reload(); }
+};
+
+// Utils
+function fmtDate(d) { return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }); }
+function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+function setSelect(id, val) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    for (let o of el.options) { if (o.value === val || o.text === val) { o.selected = true; return; } }
+}
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModalOnOverlay(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (type ? ' toast-' + type : '');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
