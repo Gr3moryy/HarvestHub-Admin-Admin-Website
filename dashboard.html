@@ -33,6 +33,15 @@
     </div>
 </div>
 
+<!-- LOADING SCREEN -->
+<div id="loading-overlay" class="loading-overlay" style="display:none;">
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <h2>Connecting to Database</h2>
+        <p>Please wait while we fetch your data...</p>
+    </div>
+</div>
+
 <div id="app">
 <header class="topnav">
     <div class="topnav-brand">
@@ -645,6 +654,7 @@ document.addEventListener('click', function(e) {
 
 // Dashboard Stats
 window.loadDashboardStats = async function() {
+    showLoading();
     try {
         const bsnap = await getDocs(collection(db, 'bookings'));
         document.getElementById('stat-total-bookings').textContent = bsnap.size;
@@ -667,7 +677,8 @@ window.loadDashboardStats = async function() {
         
         loadCurrentRentals();
         loadUpcomingBookings();
-    } catch (e) { console.error(e); }
+        hideLoading();
+    } catch (e) { console.error(e); hideLoading(); }
 };
 
 async function loadCurrentRentals() {
@@ -710,6 +721,7 @@ async function loadUpcomingBookings() {
 
 // Bookings
 window.loadBookings = async function() {
+    showLoading();
     const tb = document.getElementById('booking-tbody');
     tb.innerHTML = '<tr><td colspan="9">Loading...</td></tr>';
     try {
@@ -717,7 +729,8 @@ window.loadBookings = async function() {
         const snap = await getDocs(query(collection(db, 'bookings'), orderBy('createdAt', 'desc')));
         snap.forEach(d => allBookings.push({ id: d.id, ...d.data() }));
         renderBookings();
-    } catch (e) { tb.innerHTML = '<tr><td colspan="9">Error loading</td></tr>'; }
+        hideLoading();
+    } catch (e) { tb.innerHTML = '<tr><td colspan="9">Error loading</td></tr>'; hideLoading(); }
 };
 
 function renderBookings() {
@@ -811,6 +824,7 @@ window.createBooking = async function() {
 
 // Harvesters
 window.loadHarvesters = async function() {
+    showLoading();
     const grid = document.getElementById('harvester-grid');
     try {
         allHarvesters = [];
@@ -818,7 +832,8 @@ window.loadHarvesters = async function() {
         snap.forEach(d => allHarvesters.push({ id: d.id, ...d.data() }));
         updateHarvesterStats();
         renderHarvesters();
-    } catch (e) { console.error(e); }
+        hideLoading();
+    } catch (e) { console.error(e); hideLoading(); }
 };
 
 function updateHarvesterStats() {
@@ -929,6 +944,7 @@ window.deleteHarvester = async function() {
 
 // Pending Harvesters (Approvals)
 window.loadPendingHarvesters = async function() {
+    showLoading();
     const grid = document.getElementById('approval-grid');
     const loading = document.getElementById('approval-loading');
     const empty = document.getElementById('approval-empty');
@@ -941,6 +957,7 @@ window.loadPendingHarvesters = async function() {
         renderPendingHarvesters();
     } catch (e) { console.error(e); }
     loading.style.display = 'none';
+    hideLoading();
 };
 
 function renderPendingHarvesters() {
@@ -1025,13 +1042,15 @@ async function updateApprovalCounts() {
 
 // Customers
 window.loadCustomers = async function() {
+    showLoading();
     const tb = document.getElementById('customer-tbody');
     try {
         allCustomers = [];
         const snap = await getDocs(collection(db, 'users'));
         snap.forEach(d => allCustomers.push({ id: d.id, ...d.data() }));
         renderCustomers();
-    } catch (e) { tb.innerHTML = '<tr><td colspan="8">Error</td></tr>'; }
+        hideLoading();
+    } catch (e) { tb.innerHTML = '<tr><td colspan="8">Error</td></tr>'; hideLoading(); }
 };
 
 function renderCustomers() {
