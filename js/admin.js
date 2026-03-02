@@ -1,14 +1,3 @@
-// ===== LOADING SCREEN =====
-window.showLoading = function() {
-    const loading = document.getElementById('loading-overlay');
-    if (loading) loading.style.display = 'flex';
-};
-
-window.hideLoading = function() {
-    const loading = document.getElementById('loading-overlay');
-    if (loading) loading.style.display = 'none';
-};
-
 // ===== LOGIN (Firebase Auth — Admin Only) =====
 const ADMIN_UID = '3YLY0Mg1fxU1kV5f2TZzZm9ga1h2';
 

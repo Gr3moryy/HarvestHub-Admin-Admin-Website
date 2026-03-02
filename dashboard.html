@@ -591,6 +591,17 @@ let currentBookingId = null;
 
 const ADMIN_UID = '3YLY0Mg1fxU1kV5f2TZzZm9ga1h2';
 
+// ===== LOADING SCREEN =====
+function showLoading() {
+    const loading = document.getElementById('loading-overlay');
+    if (loading) loading.style.display = 'flex';
+}
+
+function hideLoading() {
+    const loading = document.getElementById('loading-overlay');
+    if (loading) loading.style.display = 'none';
+}
+
 document.getElementById('login-screen').style.display = 'none';
 document.getElementById('app').style.display = 'none';
 
@@ -1173,9 +1184,14 @@ function setSelect(id, val) {
     if (!el) return;
     for (let o of el.options) { if (o.value === val || o.text === val) { o.selected = true; return; } }
 }
+// modal helpers: local definitions for module scope plus expose to global window
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function closeModalOnOverlay(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+// expose for HTML onclick handlers
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.closeModalOnOverlay = closeModalOnOverlay;
 function showToast(msg, type) {
     const t = document.getElementById('toast');
     t.textContent = msg;
