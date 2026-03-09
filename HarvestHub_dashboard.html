@@ -2799,6 +2799,22 @@ function renderPendingUsers() {
     const avatarColors = ['#2d7a2d','#1a6aaa','#8a3a1a','#6a1a8a','#1a5a5a','#8a5a1a'];
     const initials = name => (name||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
 
+    // Helper function to get image URL with fallback field names
+    function getImageUrl(data, type) {
+        // Check various possible field names
+        const fieldMappings = {
+            'idFront': ['idFrontUrl', 'id_front_url', 'frontIdUrl', 'front_id_url', 'idImageFront', 'id_image_front'],
+            'idBack': ['idBackUrl', 'id_back_url', 'backIdUrl', 'back_id_url', 'idImageBack', 'id_image_back'],
+            'selfie': ['selfieUrl', 'selfie_url', 'selfUrl', 'self_url', 'selfieImage', 'selfie_image']
+        };
+        
+        const possibleFields = fieldMappings[type] || [];
+        for (const field of possibleFields) {
+            if (data[field]) return data[field];
+        }
+        return null;
+    }
+
     const slot = (url, label) => {
         if (url) {
             return `<div class="user-id-img-wrap" onclick="openLightbox('${esc(url)}','${esc(label)}')">
@@ -2818,6 +2834,11 @@ function renderPendingUsers() {
 
     grid.innerHTML = filtered.map(u => {
         const color = avatarColors[(u.id||'').charCodeAt(0) % avatarColors.length];
+        // Get image URLs with fallback field names
+        const idFrontUrl = getImageUrl(u, 'idFront');
+        const idBackUrl = getImageUrl(u, 'idBack');
+        const selfieUrl = getImageUrl(u, 'selfie');
+        
         return `<div class="user-approval-card">
             <div class="user-card-header">
                 <div class="user-avatar-large" style="background:${color}">${esc(initials(u.name))}</div>
@@ -2829,9 +2850,9 @@ function renderPendingUsers() {
                 <span class="status-badge pending" style="align-self:flex-start;flex-shrink:0">Pending</span>
             </div>
             <div class="user-id-images">
-                ${slot(u.idFrontUrl, 'ID Front')}
-                ${slot(u.idBackUrl,  'ID Back')}
-                ${slot(u.selfieUrl,  'Selfie')}
+                ${slot(idFrontUrl, 'ID Front')}
+                ${slot(idBackUrl,  'ID Back')}
+                ${slot(selfieUrl,  'Selfie')}
             </div>
             <div class="user-card-meta">
                 ${u.phone    ? `<span class="user-meta-item">📞 ${esc(u.phone)}</span>` : ''}
