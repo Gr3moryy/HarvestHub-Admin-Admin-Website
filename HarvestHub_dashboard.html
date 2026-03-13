@@ -1,0 +1,3462 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HarvestHub — Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+/* =========================================
+   HARVESTHUB ADMIN — PREMIUM UI
+   ========================================= */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+    --green-900:    #052e16;
+    --green-dark:   #14532d;
+    --green-mid:    #16a34a;
+    --green-light:  #22c55e;
+    --green-bg:     #f0fdf4;
+    --green-50:     #f0fdf4;
+    --green-100:    #dcfce7;
+    --green-200:    #bbf7d0;
+    --gold:         #fbbf24;
+    --text-dark:    #0a1a0a;
+    --text-mid:     #374151;
+    --text-light:   #6b7280;
+    --white:        #ffffff;
+    --border:       #d1fae5;
+    --border-gray:  #e5e7eb;
+    --bg-app:       #f3f8f4;
+    --shadow-xs:    0 1px 2px rgba(0,0,0,0.06);
+    --shadow:       0 1px 4px rgba(0,0,0,0.07), 0 2px 8px rgba(0,0,0,0.05);
+    --shadow-md:    0 4px 20px rgba(0,0,0,0.10);
+    --shadow-lg:    0 12px 48px rgba(0,0,0,0.14);
+    --shadow-green: 0 4px 20px rgba(20,83,45,0.25);
+    --radius:       10px;
+    --radius-lg:    14px;
+    --radius-xl:    18px;
+    --sidebar-w:    218px;
+    --nav-h:        60px;
+    --transition:   all 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+    background: var(--bg-app);
+    color: var(--text-dark);
+    min-height: 100vh;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ========== LOGIN ========== */
+#login-screen {
+    position: fixed; inset: 0;
+    background: #061a0c;
+    display: flex; align-items: center; justify-content: center; z-index: 9999;
+    overflow: hidden;
+}
+/* Animated mesh background */
+#login-screen::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+        radial-gradient(ellipse 70% 55% at 75% 20%, rgba(34,197,94,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 15% 85%, rgba(22,163,74,0.14) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 35% at 55% 60%, rgba(20,83,45,0.22) 0%, transparent 50%);
+    animation: meshShift 12s ease-in-out infinite alternate;
+}
+#login-screen::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(34,197,94,0.12)'/%3E%3C/svg%3E");
+    background-size: 60px 60px;
+}
+@keyframes meshShift {
+    0%   { opacity:1; transform:scale(1) rotate(0deg); }
+    100% { opacity:.8; transform:scale(1.08) rotate(2deg); }
+}
+.login-card {
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 52px 48px 44px;
+    width: 100%; max-width: 430px;
+    box-shadow: 0 32px 100px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08);
+    text-align: center; position: relative; overflow: hidden;
+    animation: cardEntrance 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes cardEntrance {
+    from { opacity:0; transform:translateY(32px) scale(0.96); }
+    to   { opacity:1; transform:none; }
+}
+.login-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #052e16 0%, #16a34a 40%, #22c55e 70%, #fbbf24 100%);
+}
+.login-logo {
+    width: 80px; height: 80px; border-radius: 22px;
+    background: linear-gradient(145deg, #0d3d1e, #16a34a);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 22px;
+    box-shadow: 0 10px 30px rgba(20,83,45,0.45), 0 0 0 6px rgba(22,163,74,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.login-logo:hover { transform: scale(1.05) rotate(-3deg); box-shadow: 0 14px 40px rgba(20,83,45,0.5); }
+.login-card h1 {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: 28px; color: var(--text-dark); margin-bottom: 5px;
+    letter-spacing: -0.3px;
+}
+.login-subtitle { font-size: 13px; color: var(--text-light); margin-bottom: 20px; display: block; font-weight: 500; letter-spacing: 0.02em; }
+.login-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7); color: var(--green-mid);
+    font-size: 11px; font-weight: 800; padding: 5px 14px;
+    border-radius: 20px; margin-bottom: 28px; letter-spacing: 0.08em;
+    border: 1px solid var(--green-200); text-transform: uppercase;
+}
+.login-field {
+    width: 100%; padding: 14px 16px; border: 1.5px solid #e5e7eb;
+    border-radius: 12px; font-size: 14px; font-family: "Plus Jakarta Sans", sans-serif;
+    color: var(--text-dark); background: #fafafa; margin-bottom: 12px;
+    display: block; text-align: left;
+    transition: border-color .2s, box-shadow .2s, background .2s, transform .15s;
+}
+.login-field:focus {
+    outline: none; border-color: var(--green-mid);
+    box-shadow: 0 0 0 4px rgba(22,163,74,0.12);
+    background: #fff; transform: translateY(-1px);
+}
+.login-field.field-error, .login-field.input-error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 4px rgba(239,68,68,0.10) !important;
+    background: #fff9f9 !important;
+}
+.login-field-wrap { position: relative; margin-bottom: 4px; }
+.login-field-wrap .login-field { margin-bottom: 0; }
+.login-field-error { color: #dc2626; font-size: 11.5px; font-weight: 600; margin-bottom: 8px; display: none; text-align: left; padding-left: 3px; }
+.login-field-error.show { display: block; }
+.login-btn {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, #16a34a 0%, #0f7a38 50%, #14532d 100%);
+    color: #fff; border: none; border-radius: 12px; font-size: 15px;
+    font-weight: 700; font-family: "Plus Jakarta Sans", sans-serif; cursor: pointer;
+    transition: var(--transition); box-shadow: var(--shadow-green); margin-top: 6px;
+    position: relative; overflow: hidden;
+}
+.login-btn::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+    opacity: 0; transition: opacity .2s;
+}
+.login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(20,83,45,0.45); }
+.login-btn:hover::after { opacity: 1; }
+.login-btn:active { transform: translateY(0); }
+.login-btn:disabled { opacity: .65; cursor: default; transform: none; box-shadow: none; }
+.login-error {
+    color: #dc2626; font-size: 12.5px; margin-top: 10px; display: none;
+    background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px;
+    padding: 8px 12px; font-weight: 600;
+}
+.login-hint { margin-top: 18px; font-size: 11.5px; color: #9ca3af; background: #f9fafb; padding: 9px 12px; border-radius: 10px; border: 1px solid #f0f0f0; }
+.forgot-pw-link { background: none; border: none; color: var(--green-mid); font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: "Plus Jakarta Sans", sans-serif; text-decoration: none; padding: 0; transition: color .15s; border-bottom: 1px dashed var(--green-200); }
+.forgot-pw-link:hover { color: var(--green-dark); border-bottom-style: solid; }
+
+/* ========== LOADING OVERLAY ========== */
+.loading-overlay {
+    position: fixed; inset: 0; background: rgba(5,20,8,0.6);
+    display: none; align-items: center; justify-content: center; z-index: 10000;
+    backdrop-filter: blur(4px);
+}
+.loading-overlay.active { display: flex; }
+.loading-container {
+    background: #fff; border-radius: 22px; padding: 44px 44px 40px;
+    text-align: center; box-shadow: var(--shadow-lg); max-width: 360px;
+    animation: cardEntrance 0.3s ease both;
+}
+.loading-container h2 { font-size: 17px; color: var(--text-dark); margin-bottom: 8px; font-weight: 700; }
+.loading-container p { font-size: 13px; color: var(--text-light); }
+.spinner {
+    width: 44px; height: 44px; margin: 0 auto 22px;
+    border: 3px solid var(--green-100);
+    border-top-color: var(--green-mid); border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ========== APP SHELL ========== */
+#app { display: none; }
+#logout-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(160deg, #061a0c, #14532d); opacity: 0;
+    transition: opacity 0.4s;
+}
+#logout-overlay.active { display: block; opacity: 1; }
+
+/* ========== TOPNAV ========== */
+.topnav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h);
+    background: linear-gradient(135deg, #061a0c 0%, #0d3d1e 60%, #14532d 100%);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 22px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.32), 0 1px 0 rgba(34,197,94,0.1);
+}
+.topnav-brand { display: flex; align-items: center; gap: 11px; }
+.brand-name {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: 18px; color: #fff; white-space: nowrap; letter-spacing: 0.01em;
+}
+.brand-name span { color: var(--gold); }
+.topnav-right { display: flex; align-items: center; gap: 10px; }
+
+/* Bell */
+.bell-btn {
+    position: relative; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
+    color: #fff; border-radius: 11px; width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: var(--transition);
+}
+.bell-btn:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.25); transform: translateY(-1px); }
+.bell-badge {
+    position: absolute; top: -4px; right: -4px;
+    background: #ef4444; color: #fff; font-size: 9.5px; font-weight: 800;
+    min-width: 17px; height: 17px; border-radius: 9px; padding: 0 3px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 2px solid #0d3d1e; animation: bellPulse 2.5s ease-in-out infinite;
+}
+@keyframes bellPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+
+/* Approval badge */
+.approval-badge {
+    background: #ef4444; color: #fff; font-size: 9.5px; font-weight: 800;
+    min-width: 17px; height: 17px; border-radius: 9px; padding: 0 3px;
+    display: inline-flex; align-items: center; justify-content: center; margin-left: auto;
+}
+
+/* Profile Dropdown */
+.profile-dropdown { position: relative; }
+.profile-btn {
+    display: flex; align-items: center; gap: 9px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
+    color: #fff; border-radius: 11px; padding: 6px 13px 6px 8px;
+    cursor: pointer; font-size: 13.5px; font-weight: 700;
+    font-family: "Plus Jakarta Sans", sans-serif; transition: var(--transition);
+}
+.profile-btn:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.25); }
+.profile-avatar {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #1a1a00;
+    box-shadow: 0 2px 6px rgba(251,191,36,0.4);
+}
+.profile-menu {
+    display: none; position: absolute; top: calc(100% + 10px); right: 0;
+    background: #fff; border-radius: 14px;
+    box-shadow: var(--shadow-lg); min-width: 250px; z-index: 300;
+    border: 1px solid #e8f0e8; overflow: hidden;
+    animation: menuDrop 0.18s cubic-bezier(0.4,0,0.2,1) both;
+}
+@keyframes menuDrop { from { opacity:0; transform:translateY(-8px) scale(0.97); } }
+.profile-menu.show { display: block; }
+.profile-menu-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 16px 14px; background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border-bottom: 1px solid var(--green-100);
+}
+.profile-avatar-large {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: #1a1a00;
+    box-shadow: 0 4px 12px rgba(251,191,36,0.35);
+}
+.profile-info { display: flex; flex-direction: column; }
+.profile-name-large { font-size: 14px; font-weight: 700; color: #0a1a0a; }
+.profile-email { font-size: 11.5px; color: var(--text-light); margin-top: 1px; }
+.profile-menu-divider { height: 1px; background: #f3f4f6; }
+.profile-menu-item {
+    display: flex; align-items: center; gap: 10px; padding: 11px 16px;
+    color: var(--text-mid); font-size: 13.5px; font-weight: 600;
+    transition: var(--transition); cursor: pointer; border: none; background: none;
+    width: 100%; text-align: left; font-family: "Plus Jakarta Sans", sans-serif;
+}
+.profile-menu-item:hover { background: var(--green-50); color: var(--green-mid); padding-left: 20px; }
+.profile-menu-item.logout-item { color: #dc2626; }
+.profile-menu-item.logout-item:hover { background: #fef2f2; padding-left: 20px; }
+
+/* ========== LAYOUT ========== */
+.layout { display: flex; padding-top: var(--nav-h); min-height: 100vh; }
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+    width: var(--sidebar-w); min-width: var(--sidebar-w);
+    background: linear-gradient(185deg, #061a0c 0%, #0d3d1e 50%, #14532d 100%);
+    min-height: calc(100vh - var(--nav-h)); padding: 14px 0 24px;
+    position: fixed; top: var(--nav-h); left: 0; bottom: 0;
+    box-shadow: 3px 0 16px rgba(0,0,0,0.2); z-index: 50;
+    overflow-y: auto; overflow-x: hidden;
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+.sidebar-section-label {
+    font-size: 9.5px; font-weight: 800; color: rgba(255,255,255,0.28);
+    text-transform: uppercase; letter-spacing: 0.12em; padding: 14px 20px 5px;
+}
+.sidebar-nav { display: flex; flex-direction: column; gap: 1px; padding: 2px 10px; }
+.sidebar-link {
+    display: flex; align-items: center; gap: 10px;
+    color: rgba(255,255,255,0.65); font-size: 13px; font-weight: 600;
+    padding: 10px 12px; border-radius: 10px; transition: var(--transition);
+    cursor: pointer; border: none; background: none; width: 100%;
+    text-align: left; font-family: "Plus Jakarta Sans", sans-serif; position: relative;
+}
+.sidebar-link:hover {
+    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.95);
+    padding-left: 15px;
+}
+.sidebar-link.active {
+    background: rgba(255,255,255,0.95); color: var(--green-dark); font-weight: 700;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.sidebar-link.active .sidebar-icon { color: var(--green-mid); }
+.sidebar-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform .2s; }
+.sidebar-link:hover .sidebar-icon { transform: scale(1.1); }
+
+/* ========== MAIN ========== */
+.main {
+    flex: 1; margin-left: var(--sidebar-w); padding: 24px 26px;
+    background: var(--bg-app); min-height: calc(100vh - var(--nav-h));
+}
+
+/* ========== PAGE SECTIONS ========== */
+.page-section { display: none; }
+.page-section.active { display: block; animation: pageIn 0.22s ease both; }
+@keyframes pageIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+/* ========== STAT CARDS ========== */
+.stat-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 22px; }
+.stat-card {
+    background: #fff; border-radius: var(--radius-lg); padding: 20px 22px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.05);
+    transition: var(--transition); position: relative; overflow: hidden;
+}
+.stat-card::after {
+    content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--green-mid), var(--green-light));
+    transform: scaleX(0); transform-origin: left; transition: transform .3s ease;
+}
+.stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.stat-card:hover::after { transform: scaleX(1); }
+.stat-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    transition: transform .2s;
+}
+.stat-card:hover .stat-icon { transform: scale(1.08) rotate(-5deg); }
+.stat-icon.green  { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+.stat-icon.orange { background: linear-gradient(135deg, #fff7ed, #fed7aa); }
+.stat-icon.green2 { background: linear-gradient(135deg, #f0fdf4, #bbf7d0); }
+.stat-icon.teal   { background: linear-gradient(135deg, #f0fdfa, #99f6e4); }
+.stat-info { display: flex; flex-direction: column; gap: 4px; }
+.stat-label { font-size: 11px; color: var(--text-light); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.stat-value { font-size: 32px; font-weight: 800; color: var(--text-dark); line-height: 1; letter-spacing: -1px; }
+
+/* ========== DASHBOARD TABLES ========== */
+.tables-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.table-panel {
+    background: #fff; border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.05);
+    transition: box-shadow .2s;
+}
+.table-panel:hover { box-shadow: var(--shadow-md); }
+.panel-header { padding: 15px 20px; }
+.panel-header h2 { font-family: "Instrument Serif", Georgia, serif; font-size: 15px; color: #fff; font-style: italic; }
+.green-header { background: linear-gradient(90deg, #0d3d1e, #16a34a); }
+.dark-header  { background: linear-gradient(90deg, #1f2937, #374151); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table thead tr { background: #f9fbf9; border-bottom: 1.5px solid #f0f0f0; }
+.data-table th { padding: 10px 16px; text-align: left; font-size: 10.5px; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+.data-table tbody tr { border-bottom: 1px solid #f3f4f6; transition: background .12s; }
+.data-table tbody tr:last-child { border-bottom: none; }
+.data-table tbody tr:hover { background: #f5fbf6; }
+.data-table td { padding: 11px 16px; color: var(--text-dark); vertical-align: middle; }
+
+/* ========== PAGE HEADER ========== */
+.page-title-bar {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 22px; gap: 16px; flex-wrap: wrap;
+}
+.page-title {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: 26px; color: var(--green-dark); margin-bottom: 3px;
+    letter-spacing: -0.3px;
+}
+.page-subtitle { font-size: 13px; color: var(--text-light); font-weight: 500; }
+
+/* ========== TOOLBAR ========== */
+.page-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.search-bar { position: relative; flex: 1; min-width: 220px; }
+.search-bar input {
+    width: 100%; padding: 10px 14px 10px 40px; border: 1.5px solid var(--border-gray);
+    border-radius: 11px; font-size: 13.5px; font-family: "Plus Jakarta Sans", sans-serif;
+    background: #fff; color: var(--text-dark); transition: var(--transition);
+}
+.search-bar input:focus { outline: none; border-color: var(--green-mid); box-shadow: 0 0 0 3px rgba(22,163,74,0.10); }
+.search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #9ca3af; }
+.filters { display: flex; gap: 10px; flex-wrap: wrap; }
+.filters select {
+    padding: 10px 30px 10px 13px; border: 1.5px solid var(--border-gray); border-radius: 11px;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%239ca3af' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+    font-size: 13.5px; font-family: "Plus Jakarta Sans", sans-serif; color: var(--text-dark); cursor: pointer; appearance: none;
+    transition: var(--transition);
+}
+.filters select:focus { outline: none; border-color: var(--green-mid); box-shadow: 0 0 0 3px rgba(22,163,74,0.08); }
+
+/* ========== BUTTONS ========== */
+.btn-primary {
+    background: linear-gradient(135deg, #16a34a, #14532d); color: #fff; border: none;
+    padding: 10px 20px; border-radius: var(--radius); font-size: 13.5px; font-weight: 700;
+    font-family: "Plus Jakarta Sans", sans-serif; cursor: pointer; transition: var(--transition);
+    box-shadow: var(--shadow-green); white-space: nowrap; letter-spacing: 0.01em;
+}
+.btn-primary:hover { background: linear-gradient(135deg, #22c55e, #16a34a); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(20,83,45,0.35); }
+.btn-action {
+    background: #fff; color: var(--green-mid); border: 1.5px solid #d1fae5;
+    padding: 5px 14px; border-radius: 8px; cursor: pointer; font-size: 12px;
+    font-weight: 700; font-family: "Plus Jakarta Sans", sans-serif; transition: var(--transition);
+}
+.btn-action:hover { background: var(--green-mid); color: #fff; border-color: var(--green-mid); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(22,163,74,0.3); }
+
+/* ========== BADGES ========== */
+.badge { padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 700; display: inline-block; letter-spacing: 0.03em; white-space: nowrap; }
+.badge.pending   { background: #fef9c3; color: #854d0e; }
+.badge.confirmed { background: #dbeafe; color: #1e40af; }
+.badge.completed { background: #dcfce7; color: #15803d; }
+.badge.cancelled { background: #fee2e2; color: #b91c1c; }
+.badge.active    { background: #dcfce7; color: #15803d; }
+.badge.inactive  { background: #f3f4f6; color: #4b5563; }
+
+/* ========== FULL TABLE ========== */
+.table-container {
+    background: #fff; border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: var(--shadow); margin-bottom: 16px; overflow-x: auto;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+.full-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.full-table thead tr { background: linear-gradient(90deg, #0d3d1e, #16a34a); }
+.full-table th { padding: 13px 16px; text-align: left; font-size: 10.5px; font-weight: 800; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+.full-table tbody tr { border-bottom: 1px solid #f3f4f6; transition: background .12s; }
+.full-table tbody tr:last-child { border-bottom: none; }
+.full-table tbody tr:hover { background: #f4fbf5; }
+.full-table td { padding: 12px 16px; color: var(--text-dark); vertical-align: middle; }
+
+/* ========== HARVESTERS ========== */
+.fleet-stats { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.fleet-stat-chip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 20px; border-radius: 14px; font-size: 14.5px; font-weight: 800;
+    background: #fff; box-shadow: var(--shadow); border: 1.5px solid transparent;
+    min-width: 135px; transition: var(--transition);
+}
+.fleet-stat-chip:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.chip-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.available-chip  { border-color: #bbf7d0; color: var(--green-mid); }   .available-chip .chip-dot  { background: var(--green-light); box-shadow: 0 0 6px rgba(34,197,94,0.5); }
+.rented-chip     { border-color: #fed7aa; color: #c2410c; }             .rented-chip .chip-dot     { background: #f97316; box-shadow: 0 0 6px rgba(249,115,22,0.5); }
+.maintenance-chip{ border-color: #fecaca; color: #b91c1c; }             .maintenance-chip .chip-dot{ background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+.pending-chip    { border-color: #fed7aa; color: #c2410c; }             .pending-chip .chip-dot    { background: #f97316; box-shadow: 0 0 6px rgba(249,115,22,0.5); }
+.approved-chip   { border-color: #bbf7d0; color: var(--green-mid); }    .approved-chip .chip-dot   { background: var(--green-light); box-shadow: 0 0 6px rgba(34,197,94,0.5); }
+.rejected-chip   { border-color: #fecaca; color: #b91c1c; }             .rejected-chip .chip-dot   { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+
+.harvester-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(295px,1fr)); gap: 20px; margin-bottom: 16px; }
+.harvester-card {
+    background: #fff; border-radius: var(--radius-xl); overflow: hidden;
+    box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.05);
+    transition: var(--transition);
+}
+.harvester-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.harvester-image { position: relative; height: 168px; background: var(--green-50); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.harvester-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.harvester-card:hover .harvester-image img { transform: scale(1.04); }
+.harvester-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 54px; background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+.status-badge { position: absolute; top: 10px; right: 10px; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; backdrop-filter: blur(4px); }
+.status-badge.available   { background: rgba(220,252,231,0.9); color: #15803d; }
+.status-badge.rented      { background: rgba(254,249,195,0.9); color: #854d0e; }
+.status-badge.maintenance { background: rgba(254,226,226,0.9); color: #b91c1c; }
+.status-badge.pending     { background: rgba(254,249,195,0.9); color: #854d0e; }
+.status-badge.approved    { background: rgba(220,252,231,0.9); color: #15803d; }
+.status-badge.rejected    { background: rgba(254,226,226,0.9); color: #b91c1c; }
+.harvester-info { padding: 18px 20px; }
+.harvester-info h3 { font-family: "Instrument Serif", Georgia, serif; font-size: 17px; color: #0a1a0a; margin-bottom: 2px; }
+.harvester-type { font-size: 11px; color: var(--text-light); margin-bottom: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; }
+.specs {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px;
+    background: linear-gradient(135deg, #f7fdf9, #f0fdf4); border-radius: 10px; padding: 11px 13px;
+    border: 1px solid var(--green-100);
+}
+.spec-item { display: flex; flex-direction: column; gap: 2px; }
+.spec-label { font-size: 9.5px; color: var(--text-light); font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; }
+.spec-value { font-size: 13px; font-weight: 700; color: var(--green-dark); }
+.card-actions { display: flex; gap: 8px; }
+.btn-approve-card { flex:1; padding:9px; background: linear-gradient(135deg, #16a34a, #14532d); color:#fff; border:none; border-radius:9px; cursor:pointer; font-size:12.5px; font-weight:700; font-family:"Plus Jakarta Sans",sans-serif; transition:var(--transition); box-shadow: 0 2px 8px rgba(22,163,74,0.3); }
+.btn-approve-card:hover { transform:translateY(-1px); box-shadow: 0 4px 14px rgba(22,163,74,0.4); }
+.btn-reject-card  { flex:1; padding:9px; background: linear-gradient(135deg, #ef4444, #b91c1c); color:#fff; border:none; border-radius:9px; cursor:pointer; font-size:12.5px; font-weight:700; font-family:"Plus Jakarta Sans",sans-serif; transition:var(--transition); box-shadow: 0 2px 8px rgba(239,68,68,0.3); }
+.btn-reject-card:hover  { transform:translateY(-1px); box-shadow: 0 4px 14px rgba(239,68,68,0.4); }
+
+/* ========== EMPTY STATE ========== */
+.empty-state {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 70px 20px; color: var(--text-light); text-align: center;
+    background: #fff; border-radius: var(--radius-lg); border: 2px dashed #e5e7eb;
+    margin-top: 8px;
+}
+.empty-state::before { content: "🌾"; font-size: 40px; margin-bottom: 16px; opacity: 0.5; }
+.empty-state h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text-mid); }
+.empty-state p { font-size: 13px; }
+
+/* ========== SETTINGS ========== */
+.settings-panel { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-bottom: 18px; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); }
+.settings-section-header { padding: 18px 24px; background: linear-gradient(135deg, #f7fdf9, #f0fdf4); border-bottom: 1.5px solid var(--green-100); }
+.settings-section-header h2 { font-size: 15px; font-weight: 700; color: var(--green-dark); margin-bottom: 2px; }
+.settings-section-header p { font-size: 12.5px; color: var(--text-light); }
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 24px; }
+.setting-item { display: flex; flex-direction: column; gap: 6px; }
+.setting-item label { font-size: 13px; font-weight: 700; color: var(--text-mid); }
+.setting-item input, .setting-item select {
+    padding: 10px 13px; border: 1.5px solid var(--border-gray); border-radius: 10px;
+    font-size: 13.5px; font-family: "Plus Jakarta Sans", sans-serif; color: var(--text-dark);
+    background: #fafafa; transition: var(--transition); width: 100%;
+}
+.setting-item input:focus, .setting-item select:focus { outline: none; border-color: var(--green-mid); box-shadow: 0 0 0 3px rgba(22,163,74,0.10); background: #fff; }
+.settings-actions { display: flex; gap: 12px; justify-content: flex-end; padding: 16px 24px; border-top: 1px solid #f3f4f6; background: #fafafa; }
+.btn-settings-save {
+    background: linear-gradient(135deg, var(--green-mid), var(--green-dark)); color: #fff; border: none;
+    padding: 10px 24px; border-radius: var(--radius); font-size: 13.5px; font-weight: 700;
+    font-family: "Plus Jakarta Sans", sans-serif; cursor: pointer; transition: var(--transition);
+    box-shadow: var(--shadow-green);
+}
+.btn-settings-save:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(20,83,45,0.35); }
+.btn-settings-reset { background: #fff; color: var(--text-mid); border: 1.5px solid var(--border-gray); padding: 10px 22px; border-radius: var(--radius); font-size: 13.5px; font-weight: 700; font-family: "Plus Jakarta Sans", sans-serif; cursor: pointer; transition: var(--transition); }
+.btn-settings-reset:hover { background: #f3f4f6; border-color: #d1d5db; }
+
+/* ========== MODALS ========== */
+.modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(5,20,8,0.65);
+    z-index: 1000; align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+    background: #fff; border-radius: 22px; box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+    width: 500px; max-width: 95vw; overflow: hidden;
+    animation: modalIn .28s cubic-bezier(0.16,1,0.3,1) both;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+@keyframes modalIn { from { opacity:0; transform:translateY(-20px) scale(0.96); } to { opacity:1; transform:none; } }
+.modal-header {
+    background: linear-gradient(135deg, #0d3d1e, #16a34a);
+    color: #fff; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between;
+}
+.modal-header h3 { margin: 0; font-size: 1rem; font-family: "Instrument Serif", serif; font-style: italic; letter-spacing: 0.01em; }
+.modal-close { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1.6rem; cursor: pointer; line-height: 1; padding: 0; transition: var(--transition); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+.modal-close:hover { color: #fff; background: rgba(255,255,255,0.15); }
+.modal-body { padding: 22px 24px; max-height: 70vh; overflow-y: auto; }
+.modal-body::-webkit-scrollbar { width: 4px; }
+.modal-body::-webkit-scrollbar-track { background: #f5f5f5; }
+.modal-body::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
+.modal-field { margin-bottom: 14px; }
+.modal-field label { display: block; font-size: .7rem; font-weight: 800; color: var(--text-light); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .07em; }
+.modal-field .modal-val { font-size: .96rem; color: #0a1a0a; font-weight: 600; }
+.modal-field input, .modal-field select, .modal-field textarea {
+    width: 100%; padding: 10px 13px; border: 1.5px solid var(--border-gray); border-radius: 10px;
+    font-size: 13.5px; font-family: "Plus Jakarta Sans", sans-serif; color: var(--text-dark); background: #fafafa;
+    transition: var(--transition); box-sizing: border-box;
+}
+.modal-field input:focus, .modal-field select:focus, .modal-field textarea:focus { outline: none; border-color: var(--green-mid); background: #fff; box-shadow: 0 0 0 3px rgba(22,163,74,0.10); }
+.modal-field textarea { resize: vertical; min-height: 80px; }
+.modal-fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+.modal-footer { padding: 16px 24px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid #f3f4f6; flex-wrap: wrap; background: #fafafa; }
+.modal-status-label { display: inline-block; padding: 4px 13px; border-radius: 20px; font-size: .77rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.modal-status-label.pending   { background: #fef9c3; color: #854d0e; }
+.modal-status-label.confirmed { background: #dbeafe; color: #1e40af; }
+.modal-status-label.completed { background: #dcfce7; color: #15803d; }
+.modal-status-label.cancelled { background: #fee2e2; color: #b91c1c; }
+.modal-status-label.active    { background: #dcfce7; color: #15803d; }
+.modal-status-label.inactive  { background: #fef9c3; color: #854d0e; }
+.modal-status-label.available { background: #dcfce7; color: #15803d; }
+.modal-status-label.rented    { background: #fef9c3; color: #854d0e; }
+.modal-status-label.maintenance { background: #fee2e2; color: #b91c1c; }
+.btn-approve-modal { background: linear-gradient(135deg,#16a34a,#14532d); color:#fff; border:none; border-radius:10px; padding:10px 20px; font-size:.85rem; font-weight:700; cursor:pointer; font-family:"Plus Jakarta Sans",sans-serif; transition:var(--transition); box-shadow: 0 2px 8px rgba(22,163,74,0.3); }
+.btn-approve-modal:hover { transform:translateY(-1px); box-shadow: 0 5px 16px rgba(22,163,74,0.4); }
+.btn-reject-modal  { background: linear-gradient(135deg,#ef4444,#b91c1c); color:#fff; border:none; border-radius:10px; padding:10px 20px; font-size:.85rem; font-weight:700; cursor:pointer; font-family:"Plus Jakarta Sans",sans-serif; transition:var(--transition); box-shadow: 0 2px 8px rgba(239,68,68,0.3); }
+.btn-reject-modal:hover  { transform:translateY(-1px); box-shadow: 0 5px 16px rgba(239,68,68,0.4); }
+.btn-cancel-modal  { background:#f3f4f6; color:var(--text-mid); border:1px solid #e5e7eb; border-radius:10px; padding:10px 20px; font-size:.85rem; font-weight:700; cursor:pointer; font-family:"Plus Jakarta Sans",sans-serif; transition:var(--transition); }
+.btn-cancel-modal:hover { background:#e9ecef; }
+.btn-delete-modal  { background:#fff0f0; color:#b91c1c; border:1.5px solid #fecaca; border-radius:10px; padding:10px 20px; font-size:.85rem; font-weight:700; cursor:pointer; font-family:"Plus Jakarta Sans",sans-serif; transition:var(--transition); margin-right:auto; }
+.btn-delete-modal:hover { background:#b91c1c; color:#fff; border-color:#b91c1c; }
+.modal-confirm-icon { text-align:center; padding:10px 0 4px; font-size:42px; }
+.modal-confirm-text { text-align:center; font-size:14px; color:var(--text-mid); line-height:1.6; }
+.modal-confirm-text strong { color:var(--text-dark); }
+
+/* ========== TOAST ========== */
+.toast {
+    position: fixed; bottom: 26px; right: 26px; color: #fff;
+    padding: 13px 22px 13px 16px; border-radius: 13px; font-size: .9rem; font-weight: 700;
+    font-family: "Plus Jakarta Sans", sans-serif; box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+    z-index: 2000; opacity: 0; transform: translateY(16px) scale(0.95);
+    transition: opacity .3s cubic-bezier(0.4,0,0.2,1), transform .3s cubic-bezier(0.4,0,0.2,1);
+    pointer-events: none; display: flex; align-items: center; gap: 10px;
+    background: var(--green-dark); max-width: 380px;
+    border-left: 4px solid var(--green-light);
+}
+.toast::before { content: "✓"; font-size: 14px; font-weight: 900; }
+.toast.show { opacity: 1; transform: none; }
+.toast.toast-error   { background: #1a0505; border-left-color: #ef4444; }
+.toast.toast-error::before { content: "✕"; }
+.toast.toast-success { background: #0a1f0a; border-left-color: var(--green-light); }
+
+/* ── Sidebar Group Dropdown ───────────────────────────────────────────────── */
+.sidebar-group { position: relative; }
+.sidebar-group-toggle { width:100%; justify-content:flex-start; position:relative; }
+.sidebar-chevron { margin-left:auto; transition:transform 0.25s ease; opacity:0.4; display:flex; align-items:center; }
+.sidebar-group.open .sidebar-chevron { transform:rotate(180deg); opacity:0.7; }
+.sidebar-submenu {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1);
+    background: rgba(0,0,0,0.22); border-radius: 0 0 10px 10px; margin: 0 10px;
+}
+.sidebar-group.open .sidebar-submenu { max-height: 200px; }
+.sidebar-sublink {
+    display: flex; align-items: center; gap: 9px;
+    width: 100%; padding: 9px 16px 9px 38px;
+    background: none; border: none; color: rgba(255,255,255,0.6);
+    font-size: 12.5px; font-weight: 600; cursor: pointer; text-align: left;
+    transition: var(--transition); position: relative;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+.sidebar-sublink:hover { color: #fff; background: rgba(255,255,255,0.07); }
+.sidebar-sublink.active { color: #fff; }
+.sidebar-sublink.active::before {
+    content: ""; position: absolute; left: 22px; top: 50%; transform: translateY(-50%);
+    width: 5px; height: 5px; border-radius: 50%; background: var(--gold);
+    box-shadow: 0 0 6px rgba(251,191,36,0.6);
+}
+.sub-badge {
+    margin-left: auto; background: #ef4444; color: #fff;
+    font-size: 9.5px; font-weight: 800; min-width: 17px; height: 17px;
+    border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px;
+}
+
+/* ── User Approval Cards ──────────────────────────────────────────────────── */
+.user-approval-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:20px; padding:4px 0; }
+.user-approval-card {
+    background: #fff; border-radius: var(--radius-xl); box-shadow: var(--shadow);
+    overflow: hidden; border: 1px solid rgba(0,0,0,0.05); transition: var(--transition);
+}
+.user-approval-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.user-status-badge {
+  position: static !important;
+}
+.user-card-header { display:flex; align-items:flex-start; gap:14px; padding:18px 18px 14px; border-bottom:1px solid #f3f4f6; }
+.user-avatar-large { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:800; color:#fff; flex-shrink:0; box-shadow:0 3px 10px rgba(0,0,0,0.2); }
+.user-card-info { flex:1; min-width:0; }
+.user-card-name  { font-size:15px; font-weight:700; color:#0a1a0a; margin:0 0 2px; }
+.user-card-email { font-size:12px; color:var(--text-light); margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.user-card-type  { font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; margin-top:4px; display:inline-block; }
+.user-card-type.Renter { background:var(--green-100); color:var(--green-dark); }
+.user-card-type.Owner  { background:#fff7ed; color:#c2410c; }
+.user-id-images { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:14px 18px; }
+.user-id-img-wrap { position:relative; cursor:pointer; border-radius:10px; overflow:hidden; aspect-ratio:4/3; background:#f3f4f6; border:2px solid #e5e7eb; transition:var(--transition); }
+.user-id-img-wrap:hover { border-color:var(--green-mid); transform:scale(1.04); box-shadow: 0 4px 14px rgba(22,163,74,0.25); }
+.user-id-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+.user-id-img-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:#9ca3af; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+.user-id-img-label { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,0.7)); color:#fff; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; padding:10px 6px 5px; text-align:center; }
+.zoom-hint { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.6); color:#fff; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0; transition:opacity 0.15s; pointer-events:none; }
+.user-id-img-wrap:hover .zoom-hint { opacity:1; }
+.user-card-meta { padding:0 18px 14px; display:flex; gap:8px; flex-wrap:wrap; }
+.user-meta-item { font-size:12px; color:#5a7a5a; display:flex; align-items:center; gap:4px; background: #f7fdf9; padding: 3px 9px; border-radius: 20px; }
+.user-card-actions { display:flex; gap:8px; padding:14px 18px; border-top:1px solid #f3f4f6; background:#fafcfa; }
+.user-card-actions .btn-approve-card, .user-card-actions .btn-reject-card { flex:1; }
+
+/* ========== INPUT VALIDATION ========== */
+.field-error-msg {
+    display: none; color: #dc2626; font-size: 11.5px; font-weight: 600;
+    margin-top: 5px; align-items: center; gap: 4px;
+}
+.field-error-msg.visible { display: flex; }
+.field-error-msg::before { content: "⚠"; font-size: 11px; }
+.modal-field input.input-error,
+.modal-field select.input-error,
+.modal-field textarea.input-error,
+.login-field.input-error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239,68,68,0.12) !important;
+    background: #fff9f9 !important;
+}
+.modal-field input.input-ok,
+.modal-field select.input-ok,
+.modal-field textarea.input-ok {
+    border-color: #16a34a !important;
+    box-shadow: 0 0 0 3px rgba(22,163,74,0.10) !important;
+}
+.modal-field { position: relative; }
+.char-counter { position: absolute; right: 0; top: 0; font-size: 11px; color: #9ca3af; font-weight: 500; }
+.char-counter.warn { color: #f97316; }
+.char-counter.over { color: #dc2626; font-weight: 700; }
+.form-error-banner {
+    background: #fef2f2; border: 1px solid #fecaca; border-radius: 9px;
+    padding: 10px 14px; margin-bottom: 14px; display: none;
+    color: #b91c1c; font-size: 13px; font-weight: 600; align-items: center; gap: 8px;
+}
+.form-error-banner.visible { display: flex; }
+.form-error-banner svg { flex-shrink: 0; }
+
+/* ========== USER CARD GRID ========== */
+.user-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+}
+.u-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+.u-card::before {
+    content: "";
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--green-mid);
+    border-radius: 3px 0 0 3px;
+    opacity: 0;
+    transition: opacity .2s;
+}
+.u-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.u-card:hover::before { opacity: 1; }
+.u-avatar {
+    width: 46px; height: 46px;
+    border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 900; color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.u-info { flex: 1; min-width: 0; }
+.u-name {
+    font-size: 14px; font-weight: 700; color: var(--text-dark);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+.u-email {
+    font-size: 11.5px; color: var(--text-light);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 6px;
+}
+.u-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.u-tag {
+    font-size: 10.5px; font-weight: 700; padding: 2px 8px;
+    border-radius: 20px; display: inline-block; letter-spacing: 0.03em;
+}
+.u-tag.renter   { background: var(--green-100); color: var(--green-dark); }
+.u-tag.owner    { background: #fff7ed; color: #c2410c; }
+.u-tag.admin    { background: #f3e8ff; color: #7e22ce; }
+.u-tag.active   { background: #dcfce7; color: #15803d; }
+.u-tag.inactive { background: #f3f4f6; color: #4b5563; }
+.u-tag.verified { background: #dbeafe; color: #1e40af; }
+.u-tag.pending  { background: #fef9c3; color: #854d0e; }
+.u-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.u-edit-btn {
+    background: none; border: 1.5px solid var(--border-gray);
+    color: var(--text-mid); border-radius: 8px; padding: 5px 12px;
+    font-size: 12px; font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    cursor: pointer; transition: var(--transition);
+}
+.u-edit-btn:hover { background: var(--green-mid); color: #fff; border-color: var(--green-mid); }
+.u-location {
+    font-size: 11px; color: var(--text-light);
+    display: flex; align-items: center; gap: 3px;
+}
+
+/* ========== NOTIFICATION DROPDOWN ========== */
+.notif-dropdown {
+    position: absolute; top: calc(var(--nav-h) + 6px); right: 22px;
+    width: 360px; background: #fff;
+    border-radius: 16px; box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(0,0,0,0.08); z-index: 500;
+    display: none; overflow: hidden;
+    animation: menuDrop 0.2s cubic-bezier(0.4,0,0.2,1) both;
+}
+.notif-dropdown.show { display: block; }
+.notif-header {
+    padding: 14px 18px 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #f3f4f6;
+}
+.notif-header h4 { font-size: 14px; font-weight: 800; color: var(--text-dark); }
+.notif-count-pill {
+    background: #ef4444; color: #fff;
+    font-size: 10px; font-weight: 800;
+    padding: 2px 8px; border-radius: 20px;
+}
+.notif-list { max-height: 340px; overflow-y: auto; }
+.notif-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid #f9fafb;
+    cursor: pointer; transition: background .12s;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #f7fdf8; }
+.notif-dot {
+    width: 38px; height: 38px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 18px;
+}
+.notif-dot.harvester { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+.notif-dot.user      { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+.notif-text { flex: 1; min-width: 0; }
+.notif-title { font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; }
+.notif-sub   { font-size: 11.5px; color: var(--text-light); }
+.notif-time  { font-size: 10.5px; color: #9ca3af; margin-top: 3px; }
+.notif-empty {
+    padding: 32px 20px; text-align: center;
+    color: var(--text-light); font-size: 13px;
+}
+.notif-empty span { font-size: 28px; display: block; margin-bottom: 8px; opacity: 0.5; }
+.notif-footer {
+    padding: 10px 18px;
+    border-top: 1px solid #f3f4f6;
+    text-align: center;
+}
+.notif-footer button {
+    background: none; border: none; color: var(--green-mid);
+    font-size: 12.5px; font-weight: 700; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.notif-footer button:hover { color: var(--green-dark); text-decoration: underline; }
+
+    </style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══════════════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+    <div class="login-card">
+        <div class="login-logo">
+            <svg width="38" height="38" viewBox="0 0 36 36" fill="none">
+                <path d="M6 24 Q10 14 18 16 Q26 18 30 12" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <circle cx="12" cy="26" r="3" fill="#ffc107"/>
+                <circle cx="24" cy="24" r="3" fill="#ffc107"/>
+                <rect x="8" y="18" width="20" height="6" rx="2" fill="rgba(255,255,255,0.25)" stroke="#fff" stroke-width="1.2"/>
+            </svg>
+        </div>
+        <h1>HarvestHub</h1>
+        <span class="login-subtitle">Admin Portal</span>
+        <div class="login-badge">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V4L8 1z" stroke="currentColor" stroke-width="1.5"/></svg>
+            ADMIN ACCESS ONLY
+        </div>
+        <div class="login-field-wrap">
+            <input class="login-field" type="email" id="loginUsername" placeholder="Admin Email" autocomplete="email" oninput="clearLoginFieldError('loginUsername','err-login-email')">
+        </div>
+        <div class="login-field-error" id="err-login-email"></div>
+        <div class="login-field-wrap">
+            <input class="login-field" type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" oninput="clearLoginFieldError('loginPassword','err-login-pass')">
+        </div>
+        <div class="login-field-error" id="err-login-pass"></div>
+        <button class="login-btn" onclick="doLogin()">Log In</button>
+        <div class="login-error" id="loginError"></div>
+        <div style="text-align:right;margin-top:8px">
+            <button class="forgot-pw-link" onclick="doForgotPassword()">Forgot password?</button>
+        </div>
+        <div class="login-hint">Enter your admin credentials to continue</div>
+    </div>
+</div>
+
+<!-- Forgot Password Modal (z-index above login screen) -->
+<div class="modal-overlay" id="forgotPasswordModal" onclick="closeModalOnOverlay(event,'forgotPasswordModal')" style="z-index:10002">
+    <div class="modal-box" style="max-width:400px">
+        <div class="modal-header"><h3>Reset Password</h3><button class="modal-close" onclick="closeModal('forgotPasswordModal')">×</button></div>
+        <div class="modal-body">
+            <p style="font-size:13.5px;color:#5a7a5a;margin-bottom:16px;line-height:1.6">Enter your admin email address and we'll send you a link to reset your password.</p>
+            <div class="modal-field">
+                <label>Admin Email</label>
+                <input id="forgot-email" type="email" placeholder="admin@harvesthub.com">
+            </div>
+            <div id="forgot-success" style="display:none;background:#e6f4e6;color:#2d7a2d;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;margin-top:8px">
+                ✓ Password reset email sent! Check your inbox.
+            </div>
+            <div id="forgot-error" style="display:none;background:#fde8e8;color:#c0392b;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;margin-top:8px"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('forgotPasswordModal')">Cancel</button>
+            <button class="btn-approve-modal" onclick="sendPasswordReset()">Send Reset Link</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══ LOADING ════════════════════════════════════════════════════════════════ -->
+<div id="loading-overlay" class="loading-overlay">
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <h2>Loading…</h2>
+        <p>Fetching your data from the database</p>
+    </div>
+</div>
+
+<!-- ══ LOGOUT OVERLAY ════════════════════════════════════════════════════════ -->
+<div id="logout-overlay"></div>
+
+<!-- ══ APP ════════════════════════════════════════════════════════════════════ -->
+<div id="app">
+
+<!-- Top Nav -->
+<header class="topnav">
+    <div class="topnav-brand">
+        <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
+            <path d="M6 24 Q10 14 18 16 Q26 18 30 12" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <circle cx="12" cy="26" r="3" fill="#ffc107"/>
+            <circle cx="24" cy="24" r="3" fill="#ffc107"/>
+        </svg>
+        <span class="brand-name">Harvest<span>Hub</span></span>
+    </div>
+    <div class="topnav-right">
+        <!-- Bell Notification for Approvals -->
+        <button class="bell-btn" id="bell-btn" onclick="toggleNotifDropdown()" title="Pending Approvals">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
+            </svg>
+            <span class="bell-badge" id="bell-badge" style="display:none">0</span>
+        </button>
+        <div class="profile-dropdown">
+            <button class="profile-btn" onclick="toggleProfileMenu()">
+                <div class="profile-avatar">A</div>
+                <span>Admin</span>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+            <div class="profile-menu" id="profileMenu">
+                <div class="profile-menu-header">
+                    <div class="profile-avatar-large">A</div>
+                    <div class="profile-info">
+                        <span class="profile-name-large">Administrator</span>
+                        <span class="profile-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="87e6e3eaeee9c7efe6f5f1e2f4f3eff2e5a9e4e8ea">[email&#160;protected]</a></span>
+                    </div>
+                </div>
+                <div class="profile-menu-divider"></div>
+                <button class="profile-menu-item" onclick="showPage('settings')">
+                    <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 2v2M9 14v2M2 9h2M14 9h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    Settings
+                </button>
+                <button class="profile-menu-item logout-item" onclick="doLogout()">
+                    <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M7 16H3a1 1 0 01-1-1V3a1 1 0 011-1h4M12 13l4-4-4-4M16 9H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Log Out
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Notification Dropdown -->
+<div class="notif-dropdown" id="notif-dropdown">
+    <div class="notif-header">
+        <h4>Pending Approvals</h4>
+        <span class="notif-count-pill" id="notif-count-pill" style="display:none">0</span>
+    </div>
+    <div class="notif-list" id="notif-list">
+        <div class="notif-empty"><span>🔔</span>No pending approvals</div>
+    </div>
+    <div class="notif-footer">
+        <button onclick="closeNotifAndGoApprovals()">View All Approvals →</button>
+    </div>
+</div>
+
+<!-- Layout -->
+<div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+            <div class="sidebar-section-label">Main</div>
+            <button class="sidebar-link active" id="nav-dashboard" onclick="showPage('dashboard')">
+                <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="10" y="1" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="1" y="10" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="10" y="10" width="7" height="7" rx="1.5" fill="currentColor"/></svg></span>
+                Dashboard
+            </button>
+            <button class="sidebar-link" id="nav-bookings" onclick="showPage('bookings')">
+                <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M13 1v4M1 8h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                Bookings
+            </button>
+            <div class="sidebar-section-label">Management</div>
+            <button class="sidebar-link" id="nav-harvesters" onclick="showPage('harvesters')">
+                <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="5" cy="13" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="13" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 13V7l3-4h6l3 4v1h1a1 1 0 011 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                Harvesters
+            </button>
+            <div class="sidebar-group" id="nav-approvals-group">
+                <button class="sidebar-link sidebar-group-toggle" id="nav-approvals" onclick="toggleApprovalsMenu()">
+                    <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4 8-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/></svg></span>
+                    Approvals
+                    <span class="approval-badge" id="approval-count" style="display:none">0</span>
+                    <span class="sidebar-chevron" id="approvals-chevron">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </span>
+                </button>
+                <div class="sidebar-submenu" id="approvals-submenu">
+                    <button class="sidebar-sublink active" id="nav-approvals-harvesters" onclick="showApprovalsTab('harvesters')">
+                        <span>🌾</span> Harvester Listings
+                        <span class="sub-badge" id="harvester-approval-badge" style="display:none">0</span>
+                    </button>
+                    <button class="sidebar-sublink" id="nav-approvals-users" onclick="showApprovalsTab('users')">
+                        <span>👤</span> User Verification
+                        <span class="sub-badge" id="user-approval-badge" style="display:none">0</span>
+                    </button>
+                </div>
+            </div>
+            <button class="sidebar-link" id="nav-customers" onclick="showPage('customers')">
+                <span class="sidebar-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 17c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                Users
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- ── DASHBOARD ─────────────────────────────────────────────────── -->
+        <div class="page-section active" id="page-dashboard">
+            <section class="stat-cards">
+                <div class="stat-card">
+                    <div class="stat-icon green"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><rect x="2" y="4" width="24" height="20" rx="3" stroke="#2d7a2d" stroke-width="2"/><path d="M8 2v4M20 2v4M2 11h24" stroke="#2d7a2d" stroke-width="2" stroke-linecap="round"/><rect x="7" y="15" width="4" height="4" rx="1" fill="#2d7a2d"/><rect x="13" y="15" width="4" height="4" rx="1" fill="#2d7a2d"/></svg></div>
+                    <div class="stat-info"><span class="stat-label">Total Bookings</span><span class="stat-value" id="stat-total-bookings" data-count>—</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="9" cy="22" r="3" stroke="#e07b00" stroke-width="2"/><circle cx="21" cy="22" r="3" stroke="#e07b00" stroke-width="2"/><path d="M2 22V14l4-8h10l4 6v2h2a2 2 0 012 2v4" stroke="#e07b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="stat-info"><span class="stat-label">Active Rentals</span><span class="stat-value" id="stat-active-rentals" data-count>—</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green2"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="9" cy="22" r="3" stroke="#3a9a3a" stroke-width="2"/><circle cx="21" cy="22" r="3" stroke="#3a9a3a" stroke-width="2"/><path d="M2 22V14l4-8h10l4 6v2h2a2 2 0 012 2v4" stroke="#3a9a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="stat-info"><span class="stat-label">Harvesters Available</span><span class="stat-value" id="stat-available-harvesters">—</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon teal"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><rect x="4" y="14" width="20" height="12" rx="2" stroke="#2a8a7a" stroke-width="2"/><path d="M10 19l2 2 6-4" stroke="#2a8a7a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 14V8a6 6 0 0112 0v6" stroke="#2a8a7a" stroke-width="2"/></svg></div>
+                    <div class="stat-info"><span class="stat-label">Upcoming Services</span><span class="stat-value" id="stat-upcoming-services">—</span></div>
+                </div>
+            </section>
+            <div class="tables-row">
+                <div class="table-panel">
+                    <div class="panel-header green-header"><h2>Current Rentals</h2></div>
+                    <table class="data-table">
+                        <thead><tr><th>User</th><th>Harvester</th><th>Location</th><th>Period</th></tr></thead>
+                        <tbody id="current-rentals-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="table-panel">
+                    <div class="panel-header dark-header"><h2>Upcoming Bookings</h2></div>
+                    <table class="data-table">
+                        <thead><tr><th>User</th><th>Harvester</th><th>Start</th><th>Duration</th></tr></thead>
+                        <tbody id="upcoming-bookings-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── BOOKINGS ──────────────────────────────────────────────────── -->
+        <div class="page-section" id="page-bookings">
+            <div class="page-title-bar">
+                <div><h1 class="page-title">Bookings</h1><p class="page-subtitle">Monitor all harvester rental bookings</p></div>
+            </div>
+            <div class="page-toolbar">
+                <div class="search-bar">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <input type="text" id="bookingSearch" placeholder="Search bookings…">
+                </div>
+                <div class="filters">
+                    <select id="bookingStatusFilter" onchange="filterBookings()">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="full-table">
+                    <thead><tr><th>ID</th><th>Renter</th><th>Harvester</th><th>Location</th><th>Start</th><th>End</th><th>Cost</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="booking-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── APPROVALS ─────────────────────────────────────────────────── -->
+        <div class="page-section" id="page-approvals">
+            <div class="page-title-bar">
+                <div>
+                    <h1 class="page-title" id="approvals-page-title">Harvester Approvals</h1>
+                    <p class="page-subtitle" id="approvals-page-subtitle">Review and approve harvester listings from the mobile app</p>
+                </div>
+            </div>
+
+            <!-- ── Harvester Approvals Tab ── -->
+            <div id="tab-harvesters-approvals">
+                <div class="page-toolbar">
+                    <div class="search-bar">
+                        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        <input type="text" id="approvalSearch" placeholder="Search pending listings…">
+                    </div>
+                    <div class="filters">
+                        <select id="approvalTypeFilter" onchange="filterApprovals()">
+                            <option value="">All Types</option>
+                            <option>Combine Harvester</option>
+                            <option>Rice Harvester</option>
+                            <option>Corn Harvester</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fleet-stats">
+                    <div class="fleet-stat-chip pending-chip"><span class="chip-dot"></span><span id="pending-count">0 Pending</span></div>
+                    <div class="fleet-stat-chip approved-chip"><span class="chip-dot"></span><span id="approved-count">— Approved Today</span></div>
+                    <div class="fleet-stat-chip rejected-chip"><span class="chip-dot"></span><span id="rejected-count">— Rejected Today</span></div>
+                </div>
+                <div class="harvester-grid" id="approval-grid"></div>
+                <div class="empty-state" id="approval-empty" style="display:none">
+                    <h3>No Pending Listings</h3>
+                    <p>All harvester listings have been reviewed.</p>
+                </div>
+            </div>
+
+            <!-- ── User Verification Tab ── -->
+            <div id="tab-users-approvals" style="display:none">
+                <div class="page-toolbar">
+                    <div class="search-bar">
+                        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        <input type="text" id="userApprovalSearch" oninput="filterUserApprovals()" placeholder="Search pending users…">
+                    </div>
+                    <div class="filters">
+                        <select id="userApprovalTypeFilter" onchange="filterUserApprovals()">
+                            <option value="">All Types</option>
+                            <option value="Renter">Renter</option>
+                            <option value="Owner">Owner</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fleet-stats">
+                    <div class="fleet-stat-chip pending-chip"><span class="chip-dot"></span><span id="user-pending-count">0 Pending</span></div>
+                    <div class="fleet-stat-chip approved-chip"><span class="chip-dot"></span><span id="user-approved-count">— Verified Today</span></div>
+                    <div class="fleet-stat-chip rejected-chip"><span class="chip-dot"></span><span id="user-rejected-count">— Rejected Today</span></div>
+                </div>
+                <div class="user-approval-grid" id="user-approval-grid"></div>
+                <div class="empty-state" id="user-approval-empty" style="display:none">
+                    <h3>No Pending Verifications</h3>
+                    <p>All identity verification requests have been reviewed.</p>
+                    <div style="margin-top:12px;padding:10px 14px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;max-width:400px;">
+                        <p style="font-size:11.5px;color:#15803d;font-weight:600;display:flex;align-items:center;gap:6px;">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V4L8 1z" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Secure Identity Verification
+                        </p>
+                        <p style="font-size:10.5px;color:#16a34a;margin-top:4px;line-height:1.5;">All personal data collected is encrypted and used solely for verification purposes. Reviews typically take 24-48 hours.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── HARVESTERS ─────────────────────────────────────────────────── -->
+        <div class="page-section" id="page-harvesters">
+            <div class="page-title-bar">
+                <div><h1 class="page-title">Harvester Fleet</h1><p class="page-subtitle">Manage and monitor your entire harvester fleet</p></div>
+            </div>
+            <div class="page-toolbar">
+                <div class="search-bar">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <input type="text" id="harvesterSearch" placeholder="Search harvesters…">
+                </div>
+                <div class="filters">
+                    <select id="harvesterTypeFilter" onchange="filterHarvesters()">
+                        <option value="">All Types</option>
+                        <option>Combine Harvester</option>
+                        <option>Rice Harvester</option>
+                        <option>Corn Harvester</option>
+                    </select>
+                    <select id="harvesterStatusFilter" onchange="filterHarvesters()">
+                        <option value="">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="rented">Rented</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fleet-stats">
+                <div class="fleet-stat-chip available-chip"><span class="chip-dot"></span><span id="harvester-available">— Available</span></div>
+                <div class="fleet-stat-chip rented-chip"><span class="chip-dot"></span><span id="harvester-rented">— In Use</span></div>
+                <div class="fleet-stat-chip maintenance-chip"><span class="chip-dot"></span><span id="harvester-maintenance">— Maintenance</span></div>
+            </div>
+            <div class="harvester-grid" id="harvester-grid"></div>
+        </div>
+
+        <!-- ── USERS ──────────────────────────────────────────────────── -->
+        <div class="page-section" id="page-customers">
+            <div class="page-title-bar">
+                <div><h1 class="page-title">Users</h1><p class="page-subtitle">All registered platform users</p></div>
+            </div>
+            <!-- Summary chips -->
+            <div class="fleet-stats" id="user-summary-chips">
+                <div class="fleet-stat-chip available-chip"><span class="chip-dot"></span><span id="chip-total-users">— Total</span></div>
+                <div class="fleet-stat-chip approved-chip"><span class="chip-dot"></span><span id="chip-active-users">— Active</span></div>
+                <div class="fleet-stat-chip rented-chip"><span class="chip-dot"></span><span id="chip-owners">— Owners</span></div>
+                <div class="fleet-stat-chip pending-chip"><span class="chip-dot"></span><span id="chip-renters">— Renters</span></div>
+            </div>
+            <div class="page-toolbar">
+                <div class="search-bar">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <input type="text" id="customerSearch" placeholder="Search by name or email…">
+                </div>
+                <div class="filters">
+                    <select id="customerTypeFilter" onchange="filterCustomers()">
+                        <option value="">All Types</option>
+                        <option>Renter</option>
+                        <option>Owner</option>
+                        <option>Admin</option>
+                    </select>
+                    <select id="customerStatusFilter" onchange="filterCustomers()">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="user-card-grid" id="user-card-grid"></div>
+            <div class="empty-state" id="user-empty" style="display:none">
+                <h3>No Users Found</h3><p>Try adjusting your search or filters.</p>
+            </div>
+        </div>
+
+        <!-- ── SETTINGS ──────────────────────────────────────────────────── -->
+        <div class="page-section" id="page-settings">
+            <div class="page-title-bar">
+                <div><h1 class="page-title">Settings</h1><p class="page-subtitle">Configure platform preferences</p></div>
+            </div>
+
+            <!-- General -->
+            <div class="settings-panel">
+                <div class="settings-section-header">
+                    <h2>General Settings</h2>
+                    <p>Basic platform configuration and contact information</p>
+                </div>
+                <div class="settings-grid">
+                    <div class="setting-item"><label>Platform Name</label><input type="text" id="setting-platform-name"></div>
+                    <div class="setting-item"><label>Support Email</label><input type="email" id="setting-support-email"></div>
+                    <div class="setting-item"><label>Contact Phone</label><input type="tel" id="setting-contact-phone"></div>
+                    <div class="setting-item"><label>Business Hours</label><input type="text" id="setting-business-hours"></div>
+                </div>
+            </div>
+
+            <!-- Booking -->
+            <div class="settings-panel">
+                <div class="settings-section-header">
+                    <h2>Booking Settings</h2>
+                    <p>Control how bookings are created and managed</p>
+                </div>
+                <div class="settings-grid">
+                    <div class="setting-item"><label>Min Booking Duration (days)</label><input type="number" id="setting-min-duration"></div>
+                    <div class="setting-item"><label>Max Booking Duration (days)</label><input type="number" id="setting-max-duration"></div>
+                    <div class="setting-item"><label>Advance Booking Period (days)</label><input type="number" id="setting-advance-booking"></div>
+                    <div class="setting-item"><label>Cancellation Period (hours)</label><input type="number" id="setting-cancellation-period"></div>
+                </div>
+            </div>
+
+            <!-- Payment -->
+            <div class="settings-panel">
+                <div class="settings-section-header">
+                    <h2>Payment Settings</h2>
+                    <p>Configure accepted payment methods and fee structures</p>
+                </div>
+                <div class="settings-grid">
+                    <div class="setting-item"><label>Currency</label>
+                        <select id="setting-currency"><option>PHP (₱)</option><option>USD ($)</option><option>EUR (€)</option></select>
+                    </div>
+                    <div class="setting-item"><label>Platform Fee (%)</label><input type="number" id="setting-platform-fee" step="0.1"></div>
+                    <div class="setting-item"><label>Security Deposit (%)</label><input type="number" id="setting-security-deposit" step="0.1"></div>
+                </div>
+            </div>
+
+            <!-- System -->
+            <div class="settings-panel">
+                <div class="settings-section-header">
+                    <h2>System Settings</h2>
+                    <p>Regional and system-level preferences</p>
+                </div>
+                <div class="settings-grid">
+                    <div class="setting-item"><label>Timezone</label>
+                        <select id="setting-timezone"><option>Asia/Manila (GMT+8)</option><option>UTC</option><option>Asia/Tokyo</option></select>
+                    </div>
+                    <div class="setting-item"><label>Date Format</label>
+                        <select id="setting-date-format"><option>MM/DD/YYYY</option><option>DD/MM/YYYY</option><option>YYYY-MM-DD</option></select>
+                    </div>
+                </div>
+                <div class="settings-actions">
+                    <button class="btn-settings-reset" onclick="resetSettings()">Reset to Defaults</button>
+                    <button class="btn-settings-save" onclick="saveSettings()">Save All Changes</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div><!-- /app -->
+</div><!-- /layout -->
+
+<!-- ══ MODALS ════════════════════════════════════════════════════════════════ -->
+
+<!-- Booking View (read-only) -->
+<div class="modal-overlay" id="bookingViewModal" onclick="closeModalOnOverlay(event,'bookingViewModal')">
+    <div class="modal-box" style="max-width:520px">
+        <div class="modal-header">
+            <h3 id="bmv-id">Booking Details</h3>
+            <button class="modal-close" onclick="closeModal('bookingViewModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <div style="background:var(--green-50);border:1px solid var(--green-100);border-radius:10px;padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:10px">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#16a34a" stroke-width="1.5"/><path d="M8 5v3M8 11h.01" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <span style="font-size:12.5px;color:#15803d;font-weight:600">Read-only — booking data from the mobile app</span>
+            </div>
+            <div class="modal-fields-grid">
+                <div class="modal-field"><label>Renter</label><div class="modal-val" id="bmv-renter"></div></div>
+                <div class="modal-field"><label>Harvester</label><div class="modal-val" id="bmv-harvester"></div></div>
+                <div class="modal-field"><label>Location</label><div class="modal-val" id="bmv-location"></div></div>
+                <div class="modal-field"><label>Total Cost</label><div class="modal-val" id="bmv-cost"></div></div>
+                <div class="modal-field"><label>Start Date</label><div class="modal-val" id="bmv-start"></div></div>
+                <div class="modal-field"><label>End Date</label><div class="modal-val" id="bmv-end"></div></div>
+                <div class="modal-field"><label>Status</label><div><span class="modal-status-label" id="bmv-status-label"></span></div></div>
+                <div class="modal-field"><label>Booking ID</label><div class="modal-val" id="bmv-full-id" style="font-family:monospace;font-size:12px;color:#7a907a"></div></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('bookingViewModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Harvester Edit -->
+<div class="modal-overlay" id="harvesterEditModal" onclick="closeModalOnOverlay(event,'harvesterEditModal')">
+    <div class="modal-box">
+        <div class="modal-header"><h3 id="hem-title">Edit Harvester</h3><button class="modal-close" onclick="closeModal('harvesterEditModal')">×</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="hem-doc-id">
+            <div class="form-error-banner" id="hem-banner"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3M8 10.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Please fix the errors below before saving.</div>
+            <div class="modal-fields-grid">
+                <div class="modal-field"><label>Name</label><input id="hem-name" type="text" placeholder="e.g. John's Combine"><span class="field-error-msg" id="err-hem-name">Name is required</span></div>
+                <div class="modal-field"><label>Type</label>
+                    <select id="hem-type"><option>Combine Harvester</option><option>Rice Harvester</option><option>Corn Harvester</option></select>
+                </div>
+                <div class="modal-field"><label>Year</label><input id="hem-year" type="number" placeholder="2022"><span class="field-error-msg" id="err-hem-year">Enter a valid year (1900–2030)</span></div>
+                <div class="modal-field"><label>Capacity</label><input id="hem-capacity" type="text" placeholder="e.g. 5 tons/hr"></div>
+                <div class="modal-field"><label>Rate (₱/day)</label><input id="hem-rate" type="text" placeholder="0"><span class="field-error-msg" id="err-hem-rate">Rate must be a positive number</span></div>
+                <div class="modal-field"><label>Location</label><input id="hem-location" type="text"><span class="field-error-msg" id="err-hem-location">Location is required</span></div>
+                <div class="modal-field"><label>Owner</label><input id="hem-owner" type="text"><span class="field-error-msg" id="err-hem-owner">Owner name is required</span></div>
+                <div class="modal-field"><label>Status</label>
+                    <select id="hem-status"><option value="available">Available</option><option value="rented">Rented</option><option value="maintenance">Maintenance</option></select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span id="hem-approval-note" style="font-size:12px;color:#7a907a;margin-right:auto;display:none">
+                ⏳ Will be sent to Approvals first
+            </span>
+            <button class="btn-cancel-modal" onclick="closeModal('harvesterEditModal')">Cancel</button>
+            <button class="btn-reject-modal" id="hem-delete-btn" onclick="deleteHarvester()" style="display:none">Delete</button>
+            <button class="btn-approve-modal" id="hem-save-btn" onclick="saveHarvester()">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- User Edit -->
+<div class="modal-overlay" id="customerEditModal" onclick="closeModalOnOverlay(event,'customerEditModal')">
+    <div class="modal-box">
+        <div class="modal-header"><h3 id="cem-title">Edit User</h3><button class="modal-close" onclick="closeModal('customerEditModal')">×</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="cem-doc-id">
+            <div class="form-error-banner" id="cem-banner"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3M8 10.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Please fix the errors below before saving.</div>
+            <div class="modal-fields-grid">
+                <div class="modal-field"><label>Name</label><input id="cem-name" type="text"><span class="field-error-msg" id="err-cem-name">Full name is required (min 2 characters)</span></div>
+                <div class="modal-field"><label>Email</label><input id="cem-email" type="email"><span class="field-error-msg" id="err-cem-email">Enter a valid email address</span></div>
+                <div class="modal-field"><label>Phone</label><input id="cem-phone" type="tel" placeholder="+63 9XX XXX XXXX"><span class="field-error-msg" id="err-cem-phone">Enter a valid phone number</span></div>
+                <div class="modal-field"><label>Location</label><input id="cem-location" type="text"></div>
+                <div class="modal-field"><label>Type</label>
+                    <select id="cem-type"><option>Renter</option><option>Owner</option><option>Admin</option></select>
+                </div>
+                <div class="modal-field"><label>Status</label>
+                    <select id="cem-status"><option>Active</option><option>Inactive</option></select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('customerEditModal')">Cancel</button>
+            <button class="btn-delete-modal" id="cem-delete-btn" onclick="deleteUser()" style="display:none">🗑 Delete</button>
+            <button class="btn-approve-modal" onclick="saveCustomer()">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Rejection -->
+<div class="modal-overlay" id="rejectionModal" onclick="closeModalOnOverlay(event,'rejectionModal')">
+    <div class="modal-box">
+        <div class="modal-header"><h3>Reject Listing</h3><button class="modal-close" onclick="closeModal('rejectionModal')">×</button></div>
+        <div class="modal-body">
+            <div class="modal-field">
+                <label>Reason for rejection</label>
+                <textarea id="rejection-reason" placeholder="Enter the reason for rejecting this listing…"></textarea>
+                <span class="field-error-msg" id="err-rejection-reason">A rejection reason is required (min 10 characters)</span>
+            </div>
+            <input type="hidden" id="rejection-harvester-id">
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('rejectionModal')">Cancel</button>
+            <button class="btn-reject-modal" onclick="confirmReject()">Confirm Rejection</button>
+        </div>
+    </div>
+</div>
+
+<!-- Image Lightbox -->
+<div class="modal-overlay" id="imageLightboxModal" onclick="closeModal('imageLightboxModal')" style="background:rgba(0,0,0,0.92);z-index:10001">
+    <div style="position:relative;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:12px" onclick="event.stopPropagation()">
+        <div style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:0 4px">
+            <span id="lightbox-label" style="color:#fff;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:0.8"></span>
+            <button onclick="closeModal('imageLightboxModal')" style="background:rgba(255,255,255,0.15);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;line-height:1">×</button>
+        </div>
+        <img id="lightbox-img" src="" alt="" style="max-width:88vw;max-height:80vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6);object-fit:contain">
+    </div>
+</div>
+
+<!-- User Rejection Modal -->
+<div class="modal-overlay" id="userRejectionModal" onclick="closeModalOnOverlay(event,'userRejectionModal')">
+    <div class="modal-box" style="max-width:420px">
+        <div class="modal-header"><h3>Reject Verification</h3><button class="modal-close" onclick="closeModal('userRejectionModal')">×</button></div>
+        <div class="modal-body">
+            <div class="modal-field">
+                <label>Reason for rejection</label>
+                <textarea id="user-rejection-reason" placeholder="e.g. ID image is blurry, selfie doesn't match ID…" style="min-height:90px"></textarea>
+                <span class="field-error-msg" id="err-user-rejection-reason">A rejection reason is required (min 10 characters)</span>
+            </div>
+            <input type="hidden" id="user-rejection-id">
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('userRejectionModal')">Cancel</button>
+            <button class="btn-reject-modal" onclick="confirmRejectUser()">Confirm Rejection</button>
+        </div>
+    </div>
+</div>
+
+<!-- User View Details Modal -->
+<div class="modal-overlay" id="userViewDetailsModal" onclick="closeModalOnOverlay(event,'userViewDetailsModal')">
+    <div class="modal-box" style="max-width:600px">
+        <div class="modal-header">
+            <h3>User Verification Details</h3>
+            <button class="modal-close" onclick="closeModal('userViewDetailsModal')">×</button>
+        </div>
+        <div class="modal-body" id="user-view-details-body">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('userViewDetailsModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Confirm (replaces window.confirm) -->
+<div class="modal-overlay" id="confirmModal" onclick="closeModalOnOverlay(event,'confirmModal')">
+    <div class="modal-box" style="max-width:380px">
+        <div class="modal-header"><h3>Confirm Action</h3><button class="modal-close" onclick="closeModal('confirmModal')">×</button></div>
+        <div class="modal-body">
+            <div class="modal-confirm-icon">⚠️</div>
+            <p class="modal-confirm-text" id="confirm-message"></p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel-modal" onclick="closeModal('confirmModal')">Cancel</button>
+            <button class="btn-reject-modal" id="confirm-ok">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+
+<!-- Bridge: defines global stubs IMMEDIATELY so onclick= never errors -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function() {
+    var _queue = {};
+    var _ready = false;
+    var _fns   = {};
+
+    var NAMES = [
+        'doLogin','doLogout','doForgotPassword','sendPasswordReset','showPage','toggleProfileMenu','closeModal',
+        'closeModalOnOverlay','filterBookings','viewBooking',
+        'filterHarvesters','openNewHarvesterModal',
+        'editHarvester','saveHarvester','deleteHarvester','filterApprovals',
+        'approveHarvester','openRejectModal','confirmReject','filterCustomers',
+        'editCustomer','saveCustomer','saveSettings','resetSettings',
+        'toggleApprovalsMenu','showApprovalsTab','filterUserApprovals','approveUser',
+        'openUserRejectModal','confirmRejectUser','openLightbox','viewUserData',
+        'deleteUser','clearLoginFieldError',
+        'toggleNotifDropdown','handleNotifClick','closeNotifAndGoApprovals'
+    ];
+
+    NAMES.forEach(function(name) {
+        window[name] = function() {
+            var args = Array.prototype.slice.call(arguments);
+            if (_ready && _fns[name]) return _fns[name].apply(null, args);
+            if (!_queue[name]) _queue[name] = [];
+            _queue[name].push(args);
+        };
+    });
+
+    window.__harvesthubReady = function(fns) {
+        _fns   = fns;
+        _ready = true;
+        Object.keys(_queue).forEach(function(name) {
+            _queue[name].forEach(function(args) { if (_fns[name]) _fns[name].apply(null, args); });
+            delete _queue[name];
+        });
+    };
+})();
+</script>
+
+<script type="module">
+/**
+ * HarvestHub Admin — app.js
+ * Clean module: no dead code, debounced search, paginated data,
+ * custom confirm modal, DOMPurify-style escaping, role-based auth.
+ */
+
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
+import {
+    getFirestore, collection, query, where, getDocs, getDoc,
+    updateDoc, doc, deleteDoc, addDoc, orderBy, limit,
+    getCountFromServer
+} from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
+import {
+    getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail
+} from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
+
+// ── Firebase Config ─────────────────────────────────────────────────────────
+// IMPORTANT: Lock down Firestore Security Rules in Firebase Console so only
+// authenticated admin users can read/write. The API key alone does not grant access.
+const firebaseConfig = {
+    apiKey: "AIzaSyDE4oLipbxiVtb4PtTVdcXsQaJO6wxSkF0",
+    authDomain: "harvesthub-25071.firebaseapp.com",
+    projectId: "harvesthub-25071",
+    storageBucket: "harvesthub-25071.firebasestorage.app",
+    messagingSenderId: "727328652891",
+    appId: "1:727328652891:web:76b8fe7fe3f55c5040097e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const auth = getAuth(app);
+
+// ── Admin Check ──────────────────────────────────────────────────────────────
+// Using Firebase Custom Claims is ideal; for now we check UID + email domain.
+const ADMIN_EMAIL_DOMAIN = 'harvesthub.com';
+function isAdmin(user) {
+    return user && (
+        user.email?.endsWith('@' + ADMIN_EMAIL_DOMAIN) ||
+        user.uid === '3YLY0Mg1fxU1kV5f2TZzZm9ga1h2'
+    );
+}
+
+// ── State ────────────────────────────────────────────────────────────────────
+let allBookings = [], allHarvesters = [], allCustomers = [], pendingHarvesters = [], pendingUsers = [];
+let currentBookingId = null;
+const PAGE_SIZE = 25;
+
+// ── Utility: HTML Escape (prevent XSS from Firestore data) ──────────────────
+function esc(str) {
+    return String(str ?? '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmtDate(d) {
+    try { return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+    catch { return '-'; }
+}
+function formatDateOfBirth(dob) {
+    if (!dob) return 'Not provided';
+    try {
+        // Handle various date formats
+        const date = new Date(dob);
+        if (isNaN(date.getTime())) return 'Not provided';
+        // Format as MM/dd/yyyy
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${month}/${day}/${year}`;
+    } catch { return 'Not provided'; }
+}
+function formatIdType(idType) {
+    if (!idType) return 'Not provided';
+    const validTypes = ["Driver's License", 'Passport', 'UMID', "Voter's ID", 'National ID', 'Postal ID'];
+    // Check if it's a valid type (case-insensitive)
+    const normalized = idType.toLowerCase();
+    for (const type of validTypes) {
+        if (type.toLowerCase() === normalized) return type;
+    }
+    // If not a standard type, return as-is (user might have entered custom)
+    return idType;
+}
+function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+function setSelect(id, val) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    for (const o of el.options) { if (o.value === val || o.text === val) { o.selected = true; return; } }
+}
+
+// ── Debounce (prevents re-render on every keystroke) ─────────────────────────
+function debounce(fn, ms = 300) {
+    let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+// ── Loading / Toast ───────────────────────────────────────────────────────────
+function showLoading() { document.getElementById('loading-overlay').classList.add('active'); }
+function hideLoading() { document.getElementById('loading-overlay').classList.remove('active'); }
+
+function showToast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (type ? ' toast-' + type : '') + ' show';
+    setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── Modal Helpers ─────────────────────────────────────────────────────────────
+function openModal(id)  { const el = document.getElementById(id); if(el) el.classList.add('open'); }
+function closeModal(id) { const el = document.getElementById(id); if(el) el.classList.remove('open'); }
+function closeModalOnOverlay(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.closeModalOnOverlay = closeModalOnOverlay;
+
+// Custom confirm replaces window.confirm()
+function showConfirm(message, onConfirm) {
+    document.getElementById('confirm-message').innerHTML = esc(message);
+    openModal('confirmModal');
+    document.getElementById('confirm-ok').onclick = () => { closeModal('confirmModal'); onConfirm(); };
+}
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+const loginScreen = document.getElementById('login-screen');
+const appEl       = document.getElementById('app');
+
+function showLoginScreen() {
+    loginScreen.style.display = 'flex';
+    appEl.style.display = 'none';
+}
+function showAppScreen() {
+    loginScreen.style.display = 'none';
+    appEl.style.display = 'block';
+}
+
+// Show login screen immediately on page load (before Firebase resolves auth)
+showLoginScreen();
+
+// Firebase fires onAuthStateChanged on page load — handle it
+onAuthStateChanged(auth, user => {
+    if (user && isAdmin(user)) {
+        showAppScreen();
+        // Defer showPage so the module fully initialises pageLoaders first
+        setTimeout(() => showPage('dashboard'), 0);
+    } else {
+        if (user) signOut(auth); // non-admin user — sign them out immediately
+        showLoginScreen();
+    }
+});
+
+window.doLogin = async function() {
+    const emailEl = document.getElementById('loginUsername');
+    const passEl  = document.getElementById('loginPassword');
+    if (!emailEl || !passEl) return;
+
+    const email = emailEl.value.trim();
+    const pass  = passEl.value;
+    const err   = document.getElementById('loginError');
+    const btn   = document.querySelector('.login-btn');
+
+    // Clear previous error states
+    if (err) err.style.display = 'none';
+    clearLoginFieldError('loginUsername', 'err-login-email');
+    clearLoginFieldError('loginPassword', 'err-login-pass');
+
+    // Validate fields
+    let hasError = false;
+    if (!email) {
+        setLoginFieldError('loginUsername', 'err-login-email', 'Email is required.');
+        hasError = true;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setLoginFieldError('loginUsername', 'err-login-email', 'Please enter a valid email address.');
+        hasError = true;
+    }
+    if (!pass) {
+        setLoginFieldError('loginPassword', 'err-login-pass', 'Password is required.');
+        hasError = true;
+    } else if (pass.length < 6) {
+        setLoginFieldError('loginPassword', 'err-login-pass', 'Password must be at least 6 characters.');
+        hasError = true;
+    }
+    if (hasError) return;
+
+    if (btn) { btn.textContent = 'Logging in…'; btn.disabled = true; }
+    try {
+        const cred = await signInWithEmailAndPassword(auth, email, pass);
+        if (!isAdmin(cred.user)) {
+            await signOut(auth);
+            if (err) { err.textContent = 'Access denied. Admin accounts only.'; err.style.display = 'block'; }
+        }
+        // On success onAuthStateChanged handles the redirect — nothing else needed here
+    } catch (e) {
+        const msgs = {
+            'auth/invalid-email':          'Please enter a valid email address.',
+            'auth/user-not-found':         'No account found with that email.',
+            'auth/wrong-password':         'Incorrect password. Please try again.',
+            'auth/invalid-credential':     'Incorrect email or password.',
+            'auth/too-many-requests':      'Too many failed attempts. Try again later.',
+            'auth/network-request-failed': 'Network error. Check your connection.',
+            'auth/user-disabled':          'This account has been disabled.',
+        };
+        // Show field highlights + error banner
+        setLoginFieldError('loginUsername', 'err-login-email', ' ');
+        setLoginFieldError('loginPassword', 'err-login-pass', ' ');
+        if (err) { err.textContent = msgs[e.code] || 'Login failed. Please try again.'; err.style.display = 'block'; }
+    } finally {
+        if (btn) { btn.textContent = 'Log In'; btn.disabled = false; }
+    }
+};
+
+function setLoginFieldError(inputId, errId, msg) {
+    const el = document.getElementById(inputId);
+    const er = document.getElementById(errId);
+    if (el) el.classList.add('input-error');
+    if (er && msg && msg.trim()) { er.textContent = msg; er.classList.add('show'); }
+}
+function clearLoginFieldError(inputId, errId) {
+    const el = document.getElementById(inputId);
+    const er = document.getElementById(errId);
+    if (el) { el.classList.remove('input-error', 'field-error'); }
+    if (er) { er.textContent = ''; er.classList.remove('show'); }
+    const errBanner = document.getElementById('loginError');
+    if (errBanner) errBanner.style.display = 'none';
+}
+window.clearLoginFieldError = clearLoginFieldError;
+
+// Enter key on login screen
+document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && loginScreen.style.display !== 'none' && !document.getElementById('forgotPasswordModal')?.classList.contains('open')) {
+        window.doLogin();
+    }
+});
+
+window.doLogout = async function() {
+    const overlay = document.getElementById('logout-overlay');
+    if (overlay) overlay.classList.add('active');
+    await new Promise(r => setTimeout(r, 400));
+    await signOut(auth);
+    if (overlay) overlay.classList.remove('active');
+};
+
+window.doForgotPassword = function() {
+    const emailInput = document.getElementById('forgot-email');
+    const successEl  = document.getElementById('forgot-success');
+    const errorEl    = document.getElementById('forgot-error');
+    if (emailInput) emailInput.value = '';
+    if (emailInput) emailInput.classList.remove('input-error');
+    if (successEl) successEl.style.display = 'none';
+    if (errorEl)   errorEl.style.display   = 'none';
+    openModal('forgotPasswordModal');
+};
+
+window.sendPasswordReset = async function() {
+    const emailEl = document.getElementById('forgot-email');
+    const errEl   = document.getElementById('forgot-error');
+    const okEl    = document.getElementById('forgot-success');
+    const btn     = document.querySelector('#forgotPasswordModal .btn-approve-modal');
+
+    if (!emailEl) return;
+    const email = emailEl.value.trim();
+
+    if (errEl) errEl.style.display = 'none';
+    if (okEl)  okEl.style.display  = 'none';
+    emailEl.classList.remove('input-error');
+
+    if (!email) {
+        emailEl.classList.add('input-error');
+        if (errEl) { errEl.textContent = 'Please enter your email address.'; errEl.style.display = 'block'; }
+        return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailEl.classList.add('input-error');
+        if (errEl) { errEl.textContent = 'Please enter a valid email address (e.g. admin@harvesthub.com).'; errEl.style.display = 'block'; }
+        return;
+    }
+
+    if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+    try {
+        await sendPasswordResetEmail(auth, email);
+        if (okEl) okEl.style.display = 'block';
+        emailEl.classList.remove('input-error');
+        if (errEl) errEl.style.display = 'none';
+    } catch (e) {
+        const msgs = {
+            'auth/user-not-found':    'No admin account found with that email.',
+            'auth/invalid-email':     'Invalid email address format.',
+            'auth/too-many-requests': 'Too many requests. Please wait and try again.',
+        };
+        emailEl.classList.add('input-error');
+        if (errEl) { errEl.textContent = msgs[e.code] || 'Failed to send reset email. Try again.'; errEl.style.display = 'block'; }
+    } finally {
+        if (btn) { btn.textContent = 'Send Reset Link'; btn.disabled = false; }
+    }
+};
+
+// ── Navigation ─────────────────────────────────────────────────────────────────
+const pageLoaders = {
+    dashboard: loadDashboardStats,
+    bookings:  loadBookings,
+    harvesters:loadHarvesters,
+    approvals: loadPendingHarvesters,
+    customers: loadCustomers,
+    settings:  loadSettings,
+};
+window.showPage = function(page) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('page-' + page)?.classList.add('active');
+    document.getElementById('nav-' + page)?.classList.add('active');
+    pageLoaders[page]?.();
+};
+
+// Profile dropdown
+window.toggleProfileMenu = function() { document.getElementById('profileMenu').classList.toggle('show'); };
+document.addEventListener('click', e => {
+    const dd = document.querySelector('.profile-dropdown');
+    if (dd && !dd.contains(e.target)) document.getElementById('profileMenu').classList.remove('show');
+});
+
+// ── Dashboard ──────────────────────────────────────────────────────────────────
+async function loadDashboardStats() {
+    showLoading();
+    try {
+        // OPTIMIZATION: Use getCountFromServer for totals — avoids reading entire collections
+        const [totalBookingsCount, availableHarvestersCount, bSnap] = await Promise.all([
+            getCountFromServer(collection(db, 'bookings')),
+            getCountFromServer(query(collection(db, 'harvesters'), where('status', '==', 'available'))),
+            getDocs(query(collection(db, 'bookings'), where('status', 'in', ['confirmed', 'pending']), limit(200)))
+        ]);
+        document.getElementById('stat-total-bookings').textContent = totalBookingsCount.data().count;
+        document.getElementById('stat-available-harvesters').textContent = availableHarvestersCount.data().count;
+
+        const today = new Date();
+        let active = 0, upcoming = 0;
+        bSnap.forEach(d => {
+            const b = d.data();
+            const s = new Date(b.startDate), e = new Date(b.endDate);
+            if (b.status === 'confirmed' && today >= s && today <= e) active++;
+            if ((b.status === 'confirmed' || b.status === 'pending') && new Date(b.startDate) > today) upcoming++;
+        });
+        document.getElementById('stat-active-rentals').textContent = active;
+        document.getElementById('stat-upcoming-services').textContent = upcoming;
+
+        await Promise.all([loadCurrentRentals(), loadUpcomingBookings()]);
+    } catch (e) { console.error('Dashboard error:', e); showToast('Failed to load dashboard', 'error'); }
+    hideLoading();
+}
+
+async function loadCurrentRentals() {
+    const tb = document.getElementById('current-rentals-tbody');
+    try {
+        const snap = await getDocs(query(collection(db, 'bookings'), where('status', '==', 'confirmed'), limit(10)));
+        const today = new Date();
+        let rows = [];
+        snap.forEach(d => {
+            const b = d.data();
+            const s = new Date(b.startDate), e = new Date(b.endDate);
+            if (today >= s && today <= e && rows.length < 5)
+                rows.push(`<tr><td>${esc(b.renterName||'-')}</td><td>${esc(b.harvesterName||'-')}</td><td>${esc(b.location||'-')}</td><td>${fmtDate(s)} – ${fmtDate(e)}</td></tr>`);
+        });
+        tb.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="4" style="text-align:center;color:#9aaa9a;padding:20px">No active rentals</td></tr>';
+    } catch { tb.innerHTML = '<tr><td colspan="4">Error loading</td></tr>'; }
+}
+
+async function loadUpcomingBookings() {
+    const tb = document.getElementById('upcoming-bookings-tbody');
+    try {
+        const snap = await getDocs(query(collection(db, 'bookings'), orderBy('startDate','asc'), limit(20)));
+        const today = new Date();
+        let rows = [];
+        snap.forEach(d => {
+            const b = d.data();
+            const s = new Date(b.startDate), e = new Date(b.endDate);
+            if (s > today && (b.status === 'confirmed' || b.status === 'pending') && rows.length < 5) {
+                const days = Math.ceil((e - s) / 86400000);
+                rows.push(`<tr><td>${esc(b.renterName||'-')}</td><td>${esc(b.harvesterName||'-')}</td><td>${fmtDate(s)}</td><td>${days}d</td></tr>`);
+            }
+        });
+        tb.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="4" style="text-align:center;color:#9aaa9a;padding:20px">No upcoming bookings</td></tr>';
+    } catch { tb.innerHTML = '<tr><td colspan="4">Error loading</td></tr>'; }
+}
+
+// ── Bookings ───────────────────────────────────────────────────────────────────
+async function loadBookings() {
+    showLoading();
+    try {
+        allBookings = [];
+        // OPTIMIZATION: orderBy createdAt requires a Firestore index. We try it first
+        // and gracefully fall back to an unordered query if the index doesn't exist yet.
+        let snap;
+        try {
+            snap = await getDocs(query(collection(db, 'bookings'), orderBy('createdAt','desc'), limit(PAGE_SIZE)));
+        } catch (indexErr) {
+            console.warn('Index not ready, falling back to unordered query:', indexErr.message);
+            snap = await getDocs(query(collection(db, 'bookings'), limit(PAGE_SIZE)));
+        }
+        snap.forEach(d => allBookings.push({ id: d.id, ...d.data() }));
+        // Client-side sort as fallback so newest always appears first
+        allBookings.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+        renderBookings();
+    } catch (e) {
+        console.error('loadBookings error:', e);
+        document.getElementById('booking-tbody').innerHTML = '<tr><td colspan="9">Error loading bookings</td></tr>';
+        showToast('Failed to load bookings', 'error');
+    }
+    hideLoading();
+}
+
+function renderBookings() {
+    const tb = document.getElementById('booking-tbody');
+    const sq = document.getElementById('bookingSearch')?.value.toLowerCase() || '';
+    const sf = document.getElementById('bookingStatusFilter')?.value || '';
+    const filtered = allBookings.filter(b => {
+        const match = `${b.id} ${b.renterName||''} ${b.harvesterName||''}`.toLowerCase().includes(sq);
+        return match && (!sf || b.status === sf.toLowerCase());
+    });
+    if (!filtered.length) { tb.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:30px;color:#9aaa9a">No bookings found</td></tr>'; return; }
+    tb.innerHTML = filtered.map(b => `<tr>
+        <td style="font-family:monospace;font-size:12px;color:#7a907a">${esc(b.id.substring(0,8))}</td>
+        <td>${esc(b.renterName||'-')}</td>
+        <td>${esc(b.harvesterName||'-')}</td>
+        <td>${esc(b.location||'-')}</td>
+        <td>${fmtDate(b.startDate)}</td>
+        <td>${fmtDate(b.endDate)}</td>
+        <td style="font-weight:700;color:#2d7a2d">₱${esc(b.totalCost||0)}</td>
+        <td><span class="badge ${esc(b.status)}">${cap(b.status)}</span></td>
+        <td><button class="btn-action" onclick="viewBooking('${esc(b.id)}')">View</button></td>
+    </tr>`).join('');
+}
+
+window.filterBookings = debounce(renderBookings);
+
+window.viewBooking = function(id) {
+    const b = allBookings.find(x => x.id === id);
+    if (!b) return;
+    currentBookingId = id;
+    document.getElementById('bmv-id').textContent        = 'Booking #' + id.substring(0,8).toUpperCase();
+    document.getElementById('bmv-renter').textContent    = b.renterName    || '-';
+    document.getElementById('bmv-harvester').textContent = b.harvesterName || '-';
+    document.getElementById('bmv-location').textContent  = b.location      || '-';
+    document.getElementById('bmv-cost').textContent      = '₱' + (b.totalCost || 0);
+    document.getElementById('bmv-start').textContent     = fmtDate(b.startDate);
+    document.getElementById('bmv-end').textContent       = fmtDate(b.endDate);
+    document.getElementById('bmv-full-id').textContent   = id;
+    const lbl = document.getElementById('bmv-status-label');
+    lbl.textContent = cap(b.status);
+    lbl.className = 'modal-status-label ' + (b.status||'');
+    openModal('bookingViewModal');
+};
+
+// ── Validation Helpers ─────────────────────────────────────────────────────────
+function setFieldError(inputId, errId, show) {
+    const el  = document.getElementById(inputId);
+    const err = document.getElementById(errId);
+    if (!el || !err) return;
+    if (show) {
+        el.classList.add('input-error');
+        el.classList.remove('input-ok');
+        err.classList.add('visible');
+    } else {
+        el.classList.remove('input-error');
+        el.classList.add('input-ok');
+        err.classList.remove('visible');
+    }
+}
+function clearFieldState(inputId, errId) {
+    const el  = document.getElementById(inputId);
+    const err = document.getElementById(errId);
+    if (el)  { el.classList.remove('input-error', 'input-ok'); }
+    if (err) { err.classList.remove('visible'); }
+}
+function showFormBanner(bannerId, show) {
+    const b = document.getElementById(bannerId);
+    if (b) b.classList.toggle('visible', show);
+}
+
+// Wire live validation: clears error as user types
+function wireLiveValidation(pairs) {
+    pairs.forEach(([inputId, errId]) => {
+        const el = document.getElementById(inputId);
+        if (el) el.addEventListener('input', () => clearFieldState(inputId, errId));
+        if (el && (el.tagName === 'SELECT')) el.addEventListener('change', () => clearFieldState(inputId, errId));
+    });
+}
+
+// ── Harvesters ─────────────────────────────────────────────────────────────────
+async function loadHarvesters() {
+    showLoading();
+    try {
+        allHarvesters = [];
+        // Only show approved harvesters (available / rented / maintenance).
+        // Pending and rejected harvesters live in the Approvals page.
+        const snap = await getDocs(query(
+            collection(db, 'harvesters'),
+            where('status', 'in', ['available', 'rented', 'maintenance']),
+            limit(PAGE_SIZE)
+        ));
+        snap.forEach(d => allHarvesters.push({ id: d.id, ...d.data() }));
+        updateHarvesterStats();
+        renderHarvesters();
+    } catch (e) { console.error(e); showToast('Failed to load harvesters', 'error'); }
+    hideLoading();
+}
+
+function updateHarvesterStats() {
+    document.getElementById('harvester-available').textContent = allHarvesters.filter(h => h.status==='available').length + ' Available';
+    document.getElementById('harvester-rented').textContent    = allHarvesters.filter(h => h.status==='rented').length    + ' In Use';
+    document.getElementById('harvester-maintenance').textContent = allHarvesters.filter(h => h.status==='maintenance').length + ' Maintenance';
+}
+
+function renderHarvesters() {
+    const grid = document.getElementById('harvester-grid');
+    const sq = document.getElementById('harvesterSearch')?.value.toLowerCase() || '';
+    const tf = document.getElementById('harvesterTypeFilter')?.value || '';
+    const sf = document.getElementById('harvesterStatusFilter')?.value || '';
+    const filtered = allHarvesters.filter(h => {
+        const m = `${h.name||''} ${h.type||''}`.toLowerCase().includes(sq);
+        return m && (!tf || h.type===tf) && (!sf || h.status===sf.toLowerCase());
+    });
+    if (!filtered.length) { grid.innerHTML = '<div class="empty-state"><h3>No Harvesters Found</h3><p>Try adjusting your search or filters.</p></div>'; return; }
+    const typeEmoji = { 'Combine Harvester':'🌾', 'Rice Harvester':'🌾', 'Corn Harvester':'🌽' };
+    grid.innerHTML = filtered.map(h => {
+        const imgTag = h.imageUrl
+            ? `<img src="${esc(h.imageUrl)}" alt="${esc(h.name)}" loading="lazy">`
+            : `<div class="harvester-image-placeholder">${typeEmoji[h.type]||'🚜'}</div>`;
+        return `<div class="harvester-card">
+            <div class="harvester-image">${imgTag}<span class="status-badge ${esc(h.status||'available')}">${cap(h.status)}</span></div>
+            <div class="harvester-info">
+                <h3>${esc(h.name||'Unknown')}</h3>
+                <p class="harvester-type">${esc(h.type||'-')}</p>
+                <div class="specs">
+                    <div class="spec-item"><span class="spec-label">ID</span><span class="spec-value">${esc(h.id.substring(0,8))}</span></div>
+                    <div class="spec-item"><span class="spec-label">Rate</span><span class="spec-value">₱${esc(h.rate||0)}/day</span></div>
+                    <div class="spec-item"><span class="spec-label">Year</span><span class="spec-value">${esc(h.year||'-')}</span></div>
+                    <div class="spec-item"><span class="spec-label">Location</span><span class="spec-value">${esc(h.location||'-')}</span></div>
+                </div>
+                <div class="card-actions"><button class="btn-action" onclick="editHarvester('${esc(h.id)}')">Edit</button></div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+window.filterHarvesters = debounce(renderHarvesters);
+
+window.openNewHarvesterModal = function() {
+    document.getElementById('hem-title').textContent = 'Add Harvester';
+    document.getElementById('hem-doc-id').value = '';
+    ['hem-name','hem-year','hem-capacity','hem-rate','hem-location','hem-owner'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+    setSelect('hem-type','Combine Harvester');
+    // Hide status selector — new harvesters always start as 'pending'
+    const statusRow = document.getElementById('hem-status')?.closest('.modal-field');
+    if (statusRow) statusRow.style.display = 'none';
+    // Show approval note & update button label
+    const note = document.getElementById('hem-approval-note');
+    const btn  = document.getElementById('hem-save-btn');
+    if (note) note.style.display = 'inline';
+    if (btn)  btn.textContent = 'Submit for Approval';
+    document.getElementById('hem-delete-btn').style.display = 'none';
+    openModal('harvesterEditModal');
+};
+
+window.editHarvester = function(id) {
+    const h = allHarvesters.find(x => x.id === id);
+    if (!h) return;
+    document.getElementById('hem-title').textContent = 'Edit Harvester';
+    document.getElementById('hem-doc-id').value = id;
+    document.getElementById('hem-name').value     = h.name     || '';
+    document.getElementById('hem-year').value     = h.year     || '';
+    document.getElementById('hem-capacity').value = h.capacity || '';
+    document.getElementById('hem-rate').value     = h.rate     || '';
+    document.getElementById('hem-location').value = h.location || '';
+    document.getElementById('hem-owner').value    = h.ownerName|| '';
+    setSelect('hem-type', h.type   || 'Combine Harvester');
+    setSelect('hem-status', h.status || 'available');
+    // Show status field for existing harvesters (already approved)
+    const statusRow = document.getElementById('hem-status')?.closest('.modal-field');
+    if (statusRow) statusRow.style.display = '';
+    // Hide approval note & restore normal save label
+    const note = document.getElementById('hem-approval-note');
+    const btn  = document.getElementById('hem-save-btn');
+    if (note) note.style.display = 'none';
+    if (btn)  btn.textContent = 'Save';
+    document.getElementById('hem-delete-btn').style.display = 'inline-flex';
+    openModal('harvesterEditModal');
+};
+
+window.saveHarvester = async function() {
+    const id      = document.getElementById('hem-doc-id').value;
+    const nameEl  = document.getElementById('hem-name');
+    const yearEl  = document.getElementById('hem-year');
+    const rateEl  = document.getElementById('hem-rate');
+    const locEl   = document.getElementById('hem-location');
+    const ownerEl = document.getElementById('hem-owner');
+
+    // Reset all field states
+    ['hem-name','hem-year','hem-rate','hem-location','hem-owner'].forEach((f,i) =>
+        clearFieldState(f, ['err-hem-name','err-hem-year','err-hem-rate','err-hem-location','err-hem-owner'][i])
+    );
+    showFormBanner('hem-banner', false);
+
+    let errors = 0;
+    const name = nameEl.value.trim();
+    if (!name || name.length < 2) {
+        document.getElementById('err-hem-name').textContent = !name ? 'Name is required' : 'Name must be at least 2 characters';
+        setFieldError('hem-name','err-hem-name', true); errors++;
+    }
+
+    const year = parseInt(yearEl.value);
+    if (yearEl.value && (isNaN(year) || year < 1900 || year > new Date().getFullYear() + 1)) {
+        setFieldError('hem-year','err-hem-year', true); errors++;
+    }
+
+    const rate = parseFloat(rateEl.value);
+    if (!rateEl.value.trim()) {
+        document.getElementById('err-hem-rate').textContent = 'Daily rate is required';
+        setFieldError('hem-rate','err-hem-rate', true); errors++;
+    } else if (isNaN(rate) || rate < 0) {
+        document.getElementById('err-hem-rate').textContent = 'Rate must be a positive number';
+        setFieldError('hem-rate','err-hem-rate', true); errors++;
+    }
+
+    if (!locEl.value.trim()) {
+        setFieldError('hem-location','err-hem-location', true); errors++;
+    }
+    if (!ownerEl.value.trim() || ownerEl.value.trim().length < 2) {
+        document.getElementById('err-hem-owner').textContent = !ownerEl.value.trim()
+            ? 'Owner name is required' : 'Owner name must be at least 2 characters';
+        setFieldError('hem-owner','err-hem-owner', true); errors++;
+    }
+
+    if (errors > 0) { showFormBanner('hem-banner', true); return; }
+
+    const data = {
+        name, type: document.getElementById('hem-type').value,
+        year: yearEl.value || null,
+        capacity: document.getElementById('hem-capacity').value.trim(),
+        rate: rateEl.value.trim(),
+        location: locEl.value.trim(),
+        ownerName: ownerEl.value.trim(),
+        updatedAt: new Date().toISOString()
+    };
+    try {
+        if (id) {
+            data.status = document.getElementById('hem-status').value;
+            await updateDoc(doc(db,'harvesters',id), data);
+            showToast('Harvester updated ✓', 'success');
+            closeModal('harvesterEditModal');
+            loadHarvesters();
+        } else {
+            data.status = 'pending';
+            data.createdAt = new Date().toISOString();
+            await addDoc(collection(db,'harvesters'), data);
+            showToast('Harvester submitted for approval ✓', 'success');
+            closeModal('harvesterEditModal');
+            showPage('approvals');
+        }
+        loadDashboardStats();
+    } catch (e) { console.error(e); showToast('Failed to save', 'error'); }
+};
+
+window.deleteHarvester = function() {
+    const id = document.getElementById('hem-doc-id').value;
+    if (!id) return;
+    showConfirm('Delete this harvester? This action cannot be undone.', async () => {
+        try {
+            await deleteDoc(doc(db,'harvesters',id));
+            showToast('Harvester deleted');
+            closeModal('harvesterEditModal');
+            loadHarvesters(); loadDashboardStats();
+        } catch { showToast('Delete failed', 'error'); }
+    });
+};
+
+// ── Approvals ──────────────────────────────────────────────────────────────────
+async function loadPendingHarvesters() {
+    showLoading();
+    document.getElementById('approval-empty').style.display = 'none';
+    document.getElementById('approval-grid').innerHTML = '';
+    try {
+        const snap = await getDocs(query(collection(db,'harvesters'), where('status','==','pending'), limit(PAGE_SIZE)));
+        pendingHarvesters = [];
+        snap.forEach(d => pendingHarvesters.push({ id: d.id, ...d.data() }));
+        document.getElementById('pending-count').textContent = pendingHarvesters.length + ' Pending';
+        const badge = document.getElementById('approval-count');
+        if (badge) { badge.textContent = pendingHarvesters.length; badge.style.display = pendingHarvesters.length ? 'inline-flex' : 'none'; }
+        const bellBadge = document.getElementById('bell-badge');
+        if (bellBadge) { bellBadge.textContent = pendingHarvesters.length; bellBadge.style.display = pendingHarvesters.length ? 'inline-flex' : 'none'; }
+        // Count today's approved/rejected (simple in-memory, avoids extra reads)
+        document.getElementById('approved-count').textContent = '— Approved Today';
+        document.getElementById('rejected-count').textContent = '— Rejected Today';
+        renderPendingHarvesters();
+    } catch { showToast('Failed to load approvals', 'error'); }
+    hideLoading();
+}
+
+function renderPendingHarvesters() {
+    const grid  = document.getElementById('approval-grid');
+    const empty = document.getElementById('approval-empty');
+    const sq = document.getElementById('approvalSearch')?.value.toLowerCase() || '';
+    const tf = document.getElementById('approvalTypeFilter')?.value || '';
+    const filtered = pendingHarvesters.filter(h => {
+        const m = `${h.name||''} ${h.type||''}`.toLowerCase().includes(sq);
+        return m && (!tf || tf === 'All Types' || h.type === tf);
+    });
+    if (!filtered.length) { empty.style.display = 'flex'; grid.innerHTML = ''; return; }
+    empty.style.display = 'none';
+    const typeEmoji = { 'Combine Harvester':'🌾', 'Rice Harvester':'🌾', 'Corn Harvester':'🌽' };
+    grid.innerHTML = filtered.map(h => {
+        const imgTag = h.imageUrl
+            ? `<img src="${esc(h.imageUrl)}" alt="${esc(h.name)}" loading="lazy">`
+            : `<div class="harvester-image-placeholder">${typeEmoji[h.type]||'🚜'}</div>`;
+        return `<div class="harvester-card">
+            <div class="harvester-image">${imgTag}<span class="status-badge pending">Pending Review</span></div>
+            <div class="harvester-info">
+                <h3>${esc(h.name||'Unknown')}</h3>
+                <p class="harvester-type">${esc(h.type||'-')}</p>
+                <div class="specs">
+                    <div class="spec-item"><span class="spec-label">Owner</span><span class="spec-value">${esc(h.ownerName||'-')}</span></div>
+                    <div class="spec-item"><span class="spec-label">Rate</span><span class="spec-value">₱${esc(h.rate||0)}/day</span></div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-approve-card" onclick="approveHarvester('${esc(h.id)}')">✓ Approve</button>
+                    <button class="btn-reject-card"  onclick="openRejectModal('${esc(h.id)}')">✕ Reject</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+window.filterApprovals = debounce(renderPendingHarvesters);
+
+window.approveHarvester = async function(id) {
+    try {
+        await updateDoc(doc(db,'harvesters',id), { status:'available', approvedAt:new Date().toISOString() });
+        showToast('Harvester approved! Now visible in Harvesters page ✓');
+        pendingHarvesters = pendingHarvesters.filter(h => h.id !== id);
+        document.getElementById('pending-count').textContent = pendingHarvesters.length + ' Pending';
+        const badge = document.getElementById('approval-count');
+        if (badge) { badge.textContent = pendingHarvesters.length; badge.style.display = pendingHarvesters.length ? 'inline-flex' : 'none'; }
+        renderPendingHarvesters();
+        // Refresh harvesters cache & dashboard so approved item appears immediately
+        loadDashboardStats();
+        // Silently refresh allHarvesters in background so Harvesters page is up to date
+        getDocs(query(
+            collection(db,'harvesters'),
+            where('status','in',['available','rented','maintenance']),
+            limit(PAGE_SIZE)
+        )).then(snap => {
+            allHarvesters = [];
+            snap.forEach(d => allHarvesters.push({ id: d.id, ...d.data() }));
+        }).catch(() => {});
+    } catch (e) { console.error(e); showToast('Approval failed', 'error'); }
+};
+
+window.openRejectModal = function(id) {
+    document.getElementById('rejection-reason').value = '';
+    document.getElementById('rejection-harvester-id').value = id;
+    openModal('rejectionModal');
+};
+
+window.confirmReject = async function() {
+    const id      = document.getElementById('rejection-harvester-id').value;
+    const reason  = document.getElementById('rejection-reason').value.trim();
+    const errEl   = document.getElementById('err-rejection-reason');
+    const textEl  = document.getElementById('rejection-reason');
+
+    clearFieldState('rejection-reason', 'err-rejection-reason');
+    if (!reason) {
+        errEl.textContent = 'A rejection reason is required';
+        setFieldError('rejection-reason','err-rejection-reason', true); return;
+    }
+    if (reason.length < 10) {
+        errEl.textContent = 'Please provide more detail (at least 10 characters)';
+        setFieldError('rejection-reason','err-rejection-reason', true); return;
+    }
+    if (reason.length > 500) {
+        errEl.textContent = 'Reason is too long (max 500 characters)';
+        setFieldError('rejection-reason','err-rejection-reason', true); return;
+    }
+
+    try {
+        await updateDoc(doc(db,'harvesters',id), { status:'rejected', rejectedAt:new Date().toISOString(), rejectionReason:reason });
+        showToast('Listing rejected');
+        closeModal('rejectionModal');
+        pendingHarvesters = pendingHarvesters.filter(h => h.id !== id);
+        document.getElementById('pending-count').textContent = pendingHarvesters.length + ' Pending';
+        const badge = document.getElementById('approval-count');
+        if (badge) { badge.textContent = pendingHarvesters.length; badge.style.display = pendingHarvesters.length ? 'inline-flex' : 'none'; }
+        renderPendingHarvesters();
+    } catch { showToast('Rejection failed', 'error'); }
+};
+
+// ── Customers ──────────────────────────────────────────────────────────────────
+async function loadCustomers() {
+    showLoading();
+    try {
+        allCustomers = [];
+        const snap = await getDocs(query(collection(db,'users'), limit(PAGE_SIZE)));
+        snap.forEach(d => allCustomers.push({ id: d.id, ...d.data() }));
+        renderCustomers();
+    } catch {
+        document.getElementById('customer-tbody').innerHTML = '<tr><td colspan="8">Error loading customers</td></tr>';
+        showToast('Failed to load users', 'error');
+    }
+    hideLoading();
+}
+
+function initials(name) { return (name||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase(); }
+const avatarColors = ['#2d7a2d','#1a6aaa','#8a3a1a','#6a1a8a','#1a5a5a','#8a5a1a'];
+
+function renderCustomers() {
+    const grid  = document.getElementById('user-card-grid');
+    const empty = document.getElementById('user-empty');
+    const sq = document.getElementById('customerSearch')?.value.toLowerCase() || '';
+    const tf = document.getElementById('customerTypeFilter')?.value || '';
+    const sf = document.getElementById('customerStatusFilter')?.value || '';
+    const filtered = allCustomers.filter(c => {
+        const m = `${c.name||''} ${c.email||''}`.toLowerCase().includes(sq);
+        const typeMatch   = !tf || c.userType === tf;
+        const statusMatch = !sf || (c.status||'Active') === sf;
+        return m && typeMatch && statusMatch;
+    });
+
+    // Summary chips
+    document.getElementById('chip-total-users').textContent  = allCustomers.length + ' Total';
+    document.getElementById('chip-active-users').textContent = allCustomers.filter(c=>(c.status||'Active')==='Active').length + ' Active';
+    document.getElementById('chip-owners').textContent       = allCustomers.filter(c=>c.userType==='Owner').length + ' Owners';
+    document.getElementById('chip-renters').textContent      = allCustomers.filter(c=>c.userType==='Renter'||!c.userType).length + ' Renters';
+
+    if (!filtered.length) {
+        if (grid) grid.innerHTML = '';
+        if (empty) empty.style.display = 'flex';
+        return;
+    }
+    if (empty) empty.style.display = 'none';
+
+    const colorMap = ['#2d7a2d','#1a6aaa','#8a3a1a','#6a1a8a','#1a5a5a','#8a5a1a'];
+    grid.innerHTML = filtered.map(c => {
+        const color   = colorMap[(c.id||'').charCodeAt(0) % colorMap.length];
+        const ini     = (c.name||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const typeKey = (c.userType||'renter').toLowerCase();
+        const stKey   = (c.status||'active').toLowerCase();
+        const vKey    = c.verificationStatus === 'verified' ? 'verified' : c.verificationStatus === 'pending' ? 'pending' : '';
+        return `<div class="u-card">
+            <div class="u-avatar" style="background:${color}">${esc(ini)}</div>
+            <div class="u-info">
+                <div class="u-name">${esc(c.name||'Unknown')}</div>
+                <div class="u-email">${esc(c.email||'-')}</div>
+                <div class="u-tags">
+                    <span class="u-tag ${typeKey}">${esc(c.userType||'Renter')}</span>
+                    <span class="u-tag ${stKey}">${cap(c.status||'Active')}</span>
+                    ${vKey ? `<span class="u-tag ${vKey}">${cap(vKey)}</span>` : ''}
+                </div>
+            </div>
+            <div class="u-right">
+                <button class="u-edit-btn" onclick="editCustomer('${esc(c.id)}')">Edit</button>
+                ${c.location ? `<span class="u-location"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5zM8 7.5C7.17 7.5 6.5 6.83 6.5 6S7.17 4.5 8 4.5 9.5 5.17 9.5 6 8.83 7.5 8 7.5z" fill="currentColor"/></svg>${esc(c.location)}</span>` : ''}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+window.filterCustomers = debounce(renderCustomers);
+
+window.openNewCustomerModal = function() {}; // removed — kept as stub to avoid errors
+
+window.editCustomer = function(id) {
+    const c = allCustomers.find(x => x.id === id);
+    if (!c) return;
+    document.getElementById('cem-title').textContent = 'Edit User';
+    document.getElementById('cem-doc-id').value    = id;
+    document.getElementById('cem-name').value      = c.name     || '';
+    document.getElementById('cem-email').value     = c.email    || '';
+    document.getElementById('cem-phone').value     = c.phone    || '';
+    document.getElementById('cem-location').value  = c.location || '';
+    setSelect('cem-type', c.userType || 'Renter');
+    setSelect('cem-status', c.status || 'Active');
+    const delBtn = document.getElementById('cem-delete-btn');
+    if (delBtn) delBtn.style.display = 'inline-flex';
+    openModal('customerEditModal');
+};
+
+window.saveCustomer = async function() {
+    const id      = document.getElementById('cem-doc-id').value;
+    const nameEl  = document.getElementById('cem-name');
+    const emailEl = document.getElementById('cem-email');
+    const phoneEl = document.getElementById('cem-phone');
+    const locEl   = document.getElementById('cem-location');
+
+    // Reset all
+    ['cem-name','cem-email','cem-phone'].forEach((f, i) =>
+        clearFieldState(f, ['err-cem-name','err-cem-email','err-cem-phone'][i])
+    );
+    showFormBanner('cem-banner', false);
+
+    let errors = 0;
+    const name = nameEl.value.trim();
+    if (!name || name.length < 2) {
+        document.getElementById('err-cem-name').textContent = !name
+            ? 'Full name is required' : 'Name must be at least 2 characters';
+        setFieldError('cem-name','err-cem-name', true); errors++;
+    }
+
+    const email = emailEl.value.trim();
+    if (!email) {
+        document.getElementById('err-cem-email').textContent = 'Email address is required';
+        setFieldError('cem-email','err-cem-email', true); errors++;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('err-cem-email').textContent = 'Enter a valid email (e.g. name@email.com)';
+        setFieldError('cem-email','err-cem-email', true); errors++;
+    }
+
+    const phone = phoneEl.value.trim();
+    if (phone && !/^[+\d\s\-().]{7,20}$/.test(phone)) {
+        document.getElementById('err-cem-phone').textContent = 'Enter a valid phone number (e.g. +63 9XX XXX XXXX)';
+        setFieldError('cem-phone','err-cem-phone', true); errors++;
+    }
+
+    if (errors > 0) { showFormBanner('cem-banner', true); return; }
+
+    const data = {
+        name, email,
+        phone: phone,
+        location: locEl.value.trim(),
+        userType: document.getElementById('cem-type').value,
+        status: document.getElementById('cem-status').value,
+        updatedAt: new Date().toISOString()
+    };
+    try {
+        if (id) { await updateDoc(doc(db,'users',id), data); showToast('User updated ✓', 'success'); }
+        else     { await addDoc(collection(db,'users'), {...data, createdAt:new Date().toISOString()}); showToast('User added ✓', 'success'); }
+        closeModal('customerEditModal');
+        loadCustomers();
+    } catch { showToast('Failed to save', 'error'); }
+};
+
+window.deleteUser = function() {
+    const id = document.getElementById('cem-doc-id').value;
+    if (!id) return;
+    const name = document.getElementById('cem-name').value || 'this user';
+    showConfirm(`Permanently delete "${name}"? This cannot be undone.`, async () => {
+        try {
+            await deleteDoc(doc(db, 'users', id));
+            showToast('User deleted');
+            closeModal('customerEditModal');
+            allCustomers = allCustomers.filter(c => c.id !== id);
+            renderCustomers();
+        } catch (e) { console.error(e); showToast('Delete failed', 'error'); }
+    });
+};
+
+// ── Settings (localStorage) ───────────────────────────────────────────────────
+function loadSettings() {
+    const s = JSON.parse(localStorage.getItem('harvesthub_settings') || '{}');
+    const fields = {
+        'setting-platform-name': s.platformName || 'Harvester Booking Platform',
+        'setting-support-email': s.supportEmail || 'support@harvester.com',
+        'setting-contact-phone': s.contactPhone || '+63 2 1234 5678',
+        'setting-business-hours':s.businessHours|| 'Monday - Saturday, 8:00 AM - 6:00 PM',
+        'setting-min-duration':  s.minDuration  || '1',
+        'setting-max-duration':  s.maxDuration  || '30',
+        'setting-advance-booking':s.advanceBooking||'60',
+        'setting-cancellation-period':s.cancellationPeriod||'24',
+        'setting-platform-fee':  s.platformFee  || '10',
+        'setting-security-deposit':s.securityDeposit||'20',
+    };
+    for (const [id, val] of Object.entries(fields)) {
+        const el = document.getElementById(id); if(el) el.value = val;
+    }
+    setSelect('setting-currency',    s.currency    || 'PHP (₱)');
+    setSelect('setting-timezone',    s.timezone    || 'Asia/Manila (GMT+8)');
+    setSelect('setting-date-format', s.dateFormat  || 'MM/DD/YYYY');
+}
+
+window.saveSettings = function() {
+    // Validate settings fields before saving
+    const emailEl    = document.getElementById('setting-support-email');
+    const phoneEl    = document.getElementById('setting-contact-phone');
+    const minDurEl   = document.getElementById('setting-min-duration');
+    const maxDurEl   = document.getElementById('setting-max-duration');
+    const feeEl      = document.getElementById('setting-platform-fee');
+    const depositEl  = document.getElementById('setting-security-deposit');
+    const nameEl     = document.getElementById('setting-platform-name');
+
+    let errors = [];
+
+    if (nameEl && !nameEl.value.trim()) errors.push('Platform Name is required.');
+
+    if (emailEl) {
+        const email = emailEl.value.trim();
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            emailEl.style.borderColor = '#ef4444';
+            errors.push('Support Email must be a valid email address.');
+        } else { emailEl.style.borderColor = ''; }
+    }
+    if (phoneEl) {
+        const phone = phoneEl.value.trim();
+        if (phone && !/^[+\d\s\-().]{7,25}$/.test(phone)) {
+            phoneEl.style.borderColor = '#ef4444';
+            errors.push('Contact Phone must be a valid phone number.');
+        } else { phoneEl.style.borderColor = ''; }
+    }
+    const minD = parseInt(minDurEl?.value);
+    const maxD = parseInt(maxDurEl?.value);
+    if (minDurEl && (isNaN(minD) || minD < 1)) { minDurEl.style.borderColor='#ef4444'; errors.push('Min Booking Duration must be at least 1 day.'); } else if (minDurEl) minDurEl.style.borderColor='';
+    if (maxDurEl && (isNaN(maxD) || maxD < 1)) { maxDurEl.style.borderColor='#ef4444'; errors.push('Max Booking Duration must be at least 1 day.'); } else if (maxDurEl) maxDurEl.style.borderColor='';
+    if (minDurEl && maxDurEl && !isNaN(minD) && !isNaN(maxD) && minD > maxD) {
+        minDurEl.style.borderColor='#ef4444'; maxDurEl.style.borderColor='#ef4444';
+        errors.push('Min Duration cannot exceed Max Duration.');
+    }
+    const fee = parseFloat(feeEl?.value);
+    if (feeEl && (isNaN(fee) || fee < 0 || fee > 100)) { feeEl.style.borderColor='#ef4444'; errors.push('Platform Fee must be between 0–100%.'); } else if (feeEl) feeEl.style.borderColor='';
+    const dep = parseFloat(depositEl?.value);
+    if (depositEl && (isNaN(dep) || dep < 0 || dep > 100)) { depositEl.style.borderColor='#ef4444'; errors.push('Security Deposit must be between 0–100%.'); } else if (depositEl) depositEl.style.borderColor='';
+
+    if (errors.length > 0) {
+        showToast(errors[0], 'error');
+        return;
+    }
+
+    const keys = ['platform-name','support-email','contact-phone','business-hours',
+                  'min-duration','max-duration','advance-booking','cancellation-period',
+                  'platform-fee','security-deposit','currency','timezone','date-format'];
+    const s = {};
+    keys.forEach(k => {
+        const el = document.getElementById('setting-' + k);
+        if (el) s[k.replace(/-([a-z])/g, (_,c)=>c.toUpperCase())] = el.value;
+    });
+    localStorage.setItem('harvesthub_settings', JSON.stringify(s));
+    showToast('Settings saved! ✓', 'success');
+};
+
+window.resetSettings = function() {
+    showConfirm('Reset all settings to defaults?', () => {
+        localStorage.removeItem('harvesthub_settings');
+        loadSettings();
+        showToast('Settings reset');
+    });
+};
+
+// ── Init: wire up debounced search inputs ─────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('bookingSearch')  ?.addEventListener('input', debounce(renderBookings));
+    document.getElementById('harvesterSearch')?.addEventListener('input', debounce(renderHarvesters));
+    document.getElementById('customerSearch') ?.addEventListener('input', debounce(renderCustomers));
+    document.getElementById('approvalSearch') ?.addEventListener('input', debounce(renderPendingHarvesters));
+    loadSettings();
+
+    // ── Wire live validation for all form fields ──
+    wireLiveValidation([
+        ['hem-name','err-hem-name'],['hem-year','err-hem-year'],
+        ['hem-rate','err-hem-rate'],['hem-location','err-hem-location'],
+        ['hem-owner','err-hem-owner'],
+    ]);
+    wireLiveValidation([
+        ['cem-name','err-cem-name'],['cem-email','err-cem-email'],['cem-phone','err-cem-phone'],
+    ]);
+    wireLiveValidation([
+        ['rejection-reason','err-rejection-reason'],
+        ['user-rejection-reason','err-user-rejection-reason'],
+    ]);
+
+    // ── Char counter for rejection textareas ──
+    function attachCharCounter(textareaId, max) {
+        const el = document.getElementById(textareaId);
+        if (!el) return;
+        const parent = el.closest('.modal-field');
+        const label  = parent?.querySelector('label');
+        if (!label) return;
+        label.style.display = 'flex'; label.style.justifyContent = 'space-between'; label.style.alignItems = 'center';
+        const counter = document.createElement('span');
+        counter.className = 'char-counter';
+        counter.textContent = '0 / ' + max;
+        label.appendChild(counter);
+        el.addEventListener('input', () => {
+            const len = el.value.length;
+            counter.textContent = len + ' / ' + max;
+            counter.className = 'char-counter' + (len > max ? ' over' : len > max * 0.8 ? ' warn' : '');
+        });
+    }
+    attachCharCounter('rejection-reason', 500);
+    attachCharCounter('user-rejection-reason', 500);
+
+    // ── Clear form states on modal open ──
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        const observer = new MutationObserver(() => {
+            if (overlay.classList.contains('open')) {
+                overlay.querySelectorAll('.input-error,.input-ok').forEach(el => el.classList.remove('input-error','input-ok'));
+                overlay.querySelectorAll('.field-error-msg.visible').forEach(el => el.classList.remove('visible'));
+                overlay.querySelectorAll('.form-error-banner.visible').forEach(el => el.classList.remove('visible'));
+            }
+        });
+        observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+    });
+});
+
+
+// ── Approvals Dropdown (sidebar) ──────────────────────────────────────────────
+let currentApprovalsTab = 'harvesters';
+let approvalsMenuOpen   = false;
+
+window.toggleApprovalsMenu = function() {
+    const group = document.getElementById('nav-approvals-group');
+    approvalsMenuOpen = !approvalsMenuOpen;
+    group.classList.toggle('open', approvalsMenuOpen);
+    // Open the page to the current tab
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('page-approvals').classList.add('active');
+    document.getElementById('nav-approvals').classList.add('active');
+    if (approvalsMenuOpen) {
+        if (currentApprovalsTab === 'users') loadPendingUsers();
+        else loadPendingHarvesters();
+    }
+};
+
+window.showApprovalsTab = function(tab) {
+    currentApprovalsTab = tab;
+    document.getElementById('nav-approvals-harvesters').classList.toggle('active', tab === 'harvesters');
+    document.getElementById('nav-approvals-users').classList.toggle('active', tab === 'users');
+    document.getElementById('tab-harvesters-approvals').style.display = tab === 'harvesters' ? '' : 'none';
+    document.getElementById('tab-users-approvals').style.display      = tab === 'users'      ? '' : 'none';
+    const titles = {
+        harvesters: ['Harvester Approvals',  'Review and approve harvester listings from the mobile app'],
+        users:      ['Identity Verification',    'Review ID and selfie submissions for account verification • All data is encrypted and used solely for verification purposes'],
+    };
+    document.getElementById('approvals-page-title').textContent    = titles[tab][0];
+    document.getElementById('approvals-page-subtitle').textContent = titles[tab][1];
+    // Ensure page is visible
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('page-approvals').classList.add('active');
+    document.getElementById('nav-approvals').classList.add('active');
+    if (tab === 'users') loadPendingUsers();
+    else loadPendingHarvesters();
+};
+
+// Override pageLoaders.approvals to respect current tab
+pageLoaders.approvals = function() {
+    if (currentApprovalsTab === 'users') loadPendingUsers();
+    else loadPendingHarvesters();
+};
+
+// ── Combined badge helper ────────────────────────────────────────────────────
+function updateCombinedApprovalBadge() {
+    const total = pendingHarvesters.length + pendingUsers.length;
+    const badge = document.getElementById('approval-count');
+    if (badge) { badge.textContent = total; badge.style.display = total ? 'inline-flex' : 'none'; }
+    const hBadge = document.getElementById('harvester-approval-badge');
+    if (hBadge) { hBadge.textContent = pendingHarvesters.length; hBadge.style.display = pendingHarvesters.length ? 'inline-flex' : 'none'; }
+    const uBadge = document.getElementById('user-approval-badge');
+    if (uBadge) { uBadge.textContent = pendingUsers.length; uBadge.style.display = pendingUsers.length ? 'inline-flex' : 'none'; }
+    // Sync bell badge
+    const bellBadge = document.getElementById('bell-badge');
+    if (bellBadge) { bellBadge.textContent = total; bellBadge.style.display = total ? 'inline-flex' : 'none'; }
+}
+
+// ── Notification Dropdown ────────────────────────────────────────────────────
+let notifOpen = false;
+
+window.toggleNotifDropdown = function() {
+    notifOpen = !notifOpen;
+    document.getElementById('notif-dropdown').classList.toggle('show', notifOpen);
+    if (notifOpen) renderNotifDropdown();
+};
+
+function renderNotifDropdown() {
+    const list = document.getElementById('notif-list');
+    const items = [];
+    pendingHarvesters.forEach(h => items.push({
+        type: 'harvester',
+        title: h.name || 'Unknown Harvester',
+        sub:   `New listing — ${h.type || 'Harvester'} · ${h.ownerName || '?'}`,
+        time:  h.createdAt ? fmtDate(h.createdAt) : 'Pending',
+        action: () => { closeNotifAndGoApprovals('harvesters'); }
+    }));
+        pendingUsers.forEach(u => items.push({
+        type: 'user',
+        title: u.name || 'Unknown User',
+        sub:   `Identity verification — ${u.userType || 'Renter'}`,
+        time:  u.createdAt ? fmtDate(u.createdAt) : 'Pending',
+        action: () => { closeNotifAndGoApprovals('users'); }
+    }));
+
+    if (!items.length) {
+        list.innerHTML = `<div class="notif-empty"><span>🔔</span>No pending approvals</div>`;
+        return;
+    }
+    list.innerHTML = items.map((item, idx) => `
+        <div class="notif-item" onclick="handleNotifClick(${idx})">
+            <div class="notif-dot ${item.type}">${item.type === 'harvester' ? '🌾' : '👤'}</div>
+            <div class="notif-text">
+                <div class="notif-title">${esc(item.title)}</div>
+                <div class="notif-sub">${esc(item.sub)}</div>
+                <div class="notif-time">${esc(item.time)}</div>
+            </div>
+        </div>`).join('');
+    // Store for click handler
+    window._notifItems = items;
+}
+
+window.handleNotifClick = function(idx) {
+    const item = window._notifItems?.[idx];
+    if (item?.action) { notifOpen = false; document.getElementById('notif-dropdown').classList.remove('show'); item.action(); }
+};
+
+window.closeNotifAndGoApprovals = function(tab) {
+    notifOpen = false;
+    document.getElementById('notif-dropdown').classList.remove('show');
+    const t = tab || currentApprovalsTab || 'harvesters';
+    // Open approvals menu
+    const group = document.getElementById('nav-approvals-group');
+    group.classList.add('open');
+    approvalsMenuOpen = true;
+    window.showApprovalsTab(t);
+};
+
+// Close notif when clicking outside
+document.addEventListener('click', e => {
+    const bell = document.getElementById('bell-btn');
+    const dd   = document.getElementById('notif-dropdown');
+    if (notifOpen && bell && !bell.contains(e.target) && dd && !dd.contains(e.target)) {
+        notifOpen = false;
+        dd.classList.remove('show');
+    }
+});
+
+// ── Real-time badge polling (every 60s after login) ──────────────────────────
+let _badgeInterval = null;
+async function refreshApprovalBadges() {
+    try {
+        const [hSnap, uSnap] = await Promise.all([
+            getDocs(query(collection(db,'harvesters'), where('status','==','pending'), limit(100))),
+            getDocs(query(collection(db,'users'), where('verificationStatus','==','pending'), limit(100)))
+        ]);
+        pendingHarvesters = [];
+        hSnap.forEach(d => pendingHarvesters.push({ id: d.id, ...d.data() }));
+        pendingUsers = [];
+        uSnap.forEach(d => pendingUsers.push({ id: d.id, ...d.data() }));
+        updateCombinedApprovalBadge();
+    } catch (e) { console.warn('Badge refresh failed:', e.message); }
+}
+
+// Start polling once user is authenticated
+onAuthStateChanged(auth, user => {
+    if (user && isAdmin(user)) {
+        // Initial load
+        refreshApprovalBadges();
+        // Poll every 60 seconds
+        if (_badgeInterval) clearInterval(_badgeInterval);
+        _badgeInterval = setInterval(refreshApprovalBadges, 60000);
+    } else {
+        if (_badgeInterval) { clearInterval(_badgeInterval); _badgeInterval = null; }
+    }
+});
+
+// ── User Verification Approvals ───────────────────────────────────────────────
+
+async function loadPendingUsers() {
+    showLoading();
+    document.getElementById('user-approval-empty').style.display = 'none';
+    document.getElementById('user-approval-grid').innerHTML = '';
+    try {
+        pendingUsers = [];
+        
+        // Query both 'users' and 'verification_requests' collections
+        const usersSnap = await getDocs(query(collection(db, 'users'), limit(100)));
+        
+        // Process users from 'users' collection
+        usersSnap.forEach(d => {
+            const data = d.data();
+            const verificationStatus = data.verificationStatus || data.verification_status || '';
+            const status = data.status || '';
+            
+            // User needs verification if:
+            // - verificationStatus is 'pending' 
+            // - verificationStatus is empty/undefined (unverified)
+            // - status is 'pending'
+            if (verificationStatus === 'pending' || status === 'pending' || 
+                (!verificationStatus && !status)) {
+                pendingUsers.push({ 
+                    id: d.id, 
+                    ...data, 
+                    isVerificationRequest: false,
+                    sourceCollection: 'users'
+                });
+            }
+        });
+        
+        // Also query 'verification_requests' collection if it exists
+        try {
+            const verificationSnap = await getDocs(query(collection(db, 'verification_requests'), limit(100)));
+            verificationSnap.forEach(d => {
+                const data = d.data();
+                const status = data.status || '';
+                
+                // Include pending verification requests
+                if (status === 'pending' || status === '') {
+                    pendingUsers.push({ 
+                        id: d.id, 
+                        ...data, 
+                        isVerificationRequest: true,
+                        sourceCollection: 'verification_requests'
+                    });
+                }
+            });
+        } catch (e) {
+            console.log('verification_requests collection might not exist yet');
+        }
+        
+        console.log('Loaded pending users:', pendingUsers.length, 'total users');
+        
+        document.getElementById('user-pending-count').textContent = pendingUsers.length + ' Pending';
+        document.getElementById('user-approved-count').textContent = '— Verified Today';
+        document.getElementById('user-rejected-count').textContent = '— Rejected Today';
+        
+        if (typeof updateCombinedApprovalBadge === 'function') {
+            updateCombinedApprovalBadge();
+        }
+        renderPendingUsers();
+    } catch (e) { 
+        console.error('Error loading user verifications:', e); 
+        document.getElementById('user-approval-grid').innerHTML = '<div class="empty-state" style="display:flex"><h3>Error Loading</h3><p>Failed to load user verifications. Please try again.</p></div>';
+        showToast('Failed to load user verifications', 'error'); 
+    }
+    hideLoading();
+}
+
+function renderPendingUsers() {
+    const grid  = document.getElementById('user-approval-grid');
+    const empty = document.getElementById('user-approval-empty');
+    const sq    = document.getElementById('userApprovalSearch')?.value.toLowerCase() || '';
+    const tf    = document.getElementById('userApprovalTypeFilter')?.value || '';
+
+    const filtered = pendingUsers.filter(u => {
+        // Use helper functions to get name and email with fallback field name support
+        const displayName = getUserName(u) || 'Unknown User';
+        const displayEmail = getUserEmail(u) || '-';
+        const m = `${displayName} ${displayEmail}`.toLowerCase().includes(sq);
+        return m && (!tf || u.userType === tf);
+    });
+
+    if (!filtered.length) { empty.style.display = 'flex'; grid.innerHTML = ''; return; }
+    empty.style.display = 'none';
+
+    const avatarColors = ['#2d7a2d','#1a6aaa','#8a3a1a','#6a1a8a','#1a5a5a','#8a5a1a'];
+
+    // Helper function to get user name with fallback field names
+    function getUserName(data) {
+        const nameFields = ["name", "fullName", "full_name", "fullname", "firstName", "first_name", "fname", "displayName", "display_name", "displayname", "userName", "user_name", "username"];
+        for (const field of nameFields) {
+            if (data[field] && typeof data[field] === "string" && data[field].trim()) {
+                return data[field].trim();
+            }
+        }
+        // Try combining first and last name
+        const firstName = data.firstName || data.first_name || data.fname || "";
+        const lastName = data.lastName || data.last_name || data.lname || "";
+        if (firstName || lastName) {
+            return (firstName + " " + lastName).trim();
+        }
+        return null;
+    }
+
+    // Helper function to get user email with fallback field names
+    function getUserEmail(data) {
+        const emailFields = ["email", "userEmail", "user_email", "emailAddress", "email_address", "mail", "contactEmail", "contact_email", "Email", "eMail", "userEmailAddress", "contactEmailAddress"];
+        for (const field of emailFields) {
+            if (data[field] && typeof data[field] === "string" && data[field].trim()) {
+                return data[field].trim();
+            }
+        }
+        // Also check if there's any key containing 'email' in the data
+        for (const key of Object.keys(data)) {
+            if (key.toLowerCase().includes('email') && typeof data[key] === 'string' && data[key].trim()) {
+                return data[key].trim();
+            }
+        }
+        return null;
+    }
+
+    // Helper function to get image URL with fallback field names
+    function getImageUrl(data, type) {
+        // Check various possible field names used in mobile apps
+        const fieldMappings = {
+            'idFront': [
+                'idFrontUrl', 'id_front_url', 'frontIdUrl', 'front_id_url', 
+                'idImageFront', 'id_image_front', 'id_front', 'idFront',
+                'idCardFront', 'id_card_front', 'frontIdCard', 'id_card_front_url',
+                'frontImageUrl', 'front_image_url', 'governmentIdFront', 'government_id_front'
+            ],
+            'idBack': [
+                'idBackUrl', 'id_back_url', 'backIdUrl', 'back_id_url', 
+                'idImageBack', 'id_image_back', 'id_back', 'idBack',
+                'idCardBack', 'id_card_back', 'backIdCard', 'id_card_back_url',
+                'backImageUrl', 'back_image_url', 'governmentIdBack', 'government_id_back'
+            ],
+            'selfie': [
+                'selfieUrl', 'selfie_url', 'selfUrl', 'self_url', 
+                'selfieImage', 'selfie_image', 'selfie', 'selfiePhoto',
+                'selfiePhotoUrl', 'selfie_photo_url', 'photoUrl', 'photo_url',
+                'userPhoto', 'user_photo', 'profilePhoto', 'profile_photo',
+                'verificationSelfie', 'verification_selfie', 'idSelfie', 'id_selfie'
+            ]
+        };
+        
+        const possibleFields = fieldMappings[type] || [];
+        for (const field of possibleFields) {
+            if (data[field]) return data[field];
+        }
+        
+        // Try to find any field that might contain the image URL
+        for (const key of Object.keys(data)) {
+            if (typeof data[key] === 'string' && data[key].includes('http')) {
+                const keyLower = key.toLowerCase();
+                if (type === 'idFront' && (keyLower.includes('front') || keyLower.includes('id') && !keyLower.includes('back'))) {
+                    return data[key];
+                }
+                if (type === 'idBack' && keyLower.includes('back')) {
+                    return data[key];
+                }
+                if (type === 'selfie' && (keyLower.includes('selfie') || keyLower.includes('photo') || keyLower.includes('image'))) {
+                    return data[key];
+                }
+            }
+        }
+        return null;
+    }
+
+    
+    // Helper function to get user name with fallback field names
+    function getUserName(data) {
+        const nameFields = ["name", "fullName", "full_name", "fullname", "firstName", "first_name", "fname", "displayName", "display_name", "displayname", "userName", "user_name", "username"];
+        for (const field of nameFields) {
+            if (data[field] && typeof data[field] === "string" && data[field].trim()) {
+                return data[field].trim();
+            }
+        }
+        const firstName = data.firstName || data.first_name || data.fname || "";
+        const lastName = data.lastName || data.last_name || data.lname || "";
+        if (firstName || lastName) {
+            return (firstName + " " + lastName).trim();
+        }
+        return null;
+    }
+
+    // Helper function to get user email with fallback field names
+    function getUserEmail(data) {
+        const emailFields = ["email", "userEmail", "user_email", "emailAddress", "email_address", "mail", "contactEmail", "contact_email"];
+        for (const field of emailFields) {
+            if (data[field] && typeof data[field] === "string" && data[field].trim()) {
+                return data[field].trim();
+            }
+        }
+        return null;
+    }
+
+    // Helper function to get user phone with fallback field names
+    function getUserPhone(data) {
+        const phoneFields = ["phone", "phoneNumber", "phone_number", "mobile", "mobileNumber", "mobile_number", "contactPhone", "contact_phone", "tel", "telephone"];
+        for (const field of phoneFields) {
+            if (data[field] && typeof data[field] === "string" && data[field].trim()) {
+                return data[field].trim();
+            }
+        }
+        return null;
+    }
+
+    const slot = (url, label) => {
+        if (url) {
+            return `<div class="user-id-img-wrap" onclick="openLightbox('${esc(url)}','${esc(label)}')">
+                <img src="${esc(url)}" alt="${esc(label)}" loading="lazy">
+                <div class="user-id-img-label">${esc(label)}</div>
+                <div class="zoom-hint">🔍</div>
+            </div>`;
+        }
+        return `<div class="user-id-img-wrap" style="cursor:default;border-style:dashed">
+            <div class="user-id-img-placeholder">
+                <span style="font-size:22px">${label === 'Selfie' ? '🤳' : '🪪'}</span>
+                <span>${esc(label)}</span>
+                <span style="font-size:9px;opacity:0.55">Not uploaded</span>
+            </div>
+        </div>`;
+    };
+
+    grid.innerHTML = filtered.map(u => {
+        // Use helper functions to get user data with fallback field name support
+        const displayName = getUserName(u) || 'Unknown User';
+        const displayEmail = getUserEmail(u) || '-';
+        
+        const color = avatarColors[(u.id||'').charCodeAt(0) % avatarColors.length];
+        const initials = name => (name||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        
+        // Get image URLs with extended fallback field names
+        const idFrontUrl = getImageUrl(u, 'idFront');
+        const idBackUrl = getImageUrl(u, 'idBack');
+        const selfieUrl = getImageUrl(u, 'selfie');
+        
+        // Debug logging to help identify actual field names
+        console.log('User data keys:', Object.keys(u));
+        console.log('ID Front URL:', idFrontUrl);
+        console.log('ID Back URL:', idBackUrl);
+        console.log('Selfie URL:', selfieUrl);
+        
+        return `<div class="user-approval-card">
+            <div class="user-card-header">
+                <div class="user-avatar-large" style="background:${color}">${esc(initials(displayName))}</div>
+                <div class="user-card-info">
+                    <p class="user-card-name">${esc(displayName)}</p>
+                    <p class="user-card-email">${esc(displayEmail)}</p>
+                    <span class="user-card-type ${esc(u.userType||'Renter')}">${esc(u.userType||'Renter')}</span>
+                </div>
+<span class="status-badge pending user-status-badge" style="align-self:flex-start;flex-shrink:0;position:static !important;">Pending</span>
+            </div>
+            
+            <!-- Personal Information Section -->
+            <div class="user-personal-info" style="padding:14px 18px;border-bottom:1px solid #f3f4f6;background:#fafcfc;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;">
+                    <div style="display:flex;flex-direction:column;gap:2px;">
+                        <span style="color:#7a9a7a;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">Full Legal Name</span>
+                        <span style="color:#2a3a2a;font-weight:600;">${esc(u.fullLegalName || u.fullName || u.name || 'Not provided')}</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:2px;">
+                        <span style="color:#7a9a7a;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">Date of Birth</span>
+                        <span style="color:#2a3a2a;font-weight:600;">${formatDateOfBirth(u.dateOfBirth || u.dob)}</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:2px;grid-column:span 2;">
+                        <span style="color:#7a9a7a;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">Permanent Address</span>
+                        <span style="color:#2a3a2a;font-weight:600;">${esc(u.permanentAddress || u.address || u.location || 'Not provided')}</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:2px;">
+                        <span style="color:#7a9a7a;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">ID Type</span>
+                        <span style="color:#2a3a2a;font-weight:600;">${esc(formatIdType(u.idType || u.id_type))}</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:2px;">
+                        <span style="color:#7a9a7a;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">ID Document Number</span>
+                        <span style="color:#2a3a2a;font-weight:600;font-family:monospace;">${esc(u.idDocumentNumber || u.id_number || u.idNumber || u.documentNumber || 'Not provided')}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="user-id-images">
+                ${slot(idFrontUrl, 'ID Front')}
+                ${slot(idBackUrl,  'ID Back')}
+                ${slot(selfieUrl,  'Selfie')}
+            </div>
+            <div class="user-card-meta">
+                ${u.phone    ? `<span class="user-meta-item">📞 ${esc(u.phone)}</span>` : ''}
+                ${u.location ? `<span class="user-meta-item">📍 ${esc(u.location)}</span>` : ''}
+                ${u.createdAt ? `<span class="user-meta-item">🗓 ${fmtDate(u.createdAt)}</span>` : ''}
+                ${u.submittedAt ? `<span class="user-meta-item">🗓 ${fmtDate(u.submittedAt)}</span>` : ''}
+            </div>
+            <div class="user-card-actions">
+                <button class="btn-action" onclick="viewUserData('${esc(u.id)}')">View Details</button>
+                <button class="btn-approve-card" onclick="approveUser('${esc(u.id)}')">✓ Verify</button>
+                <button class="btn-reject-card"  onclick="openUserRejectModal('${esc(u.id)}')">✕ Reject</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+window.filterUserApprovals = debounce(renderPendingUsers);
+
+// ── Image Lightbox ────────────────────────────────────────────────────────────
+window.openLightbox = function(url, label) {
+    document.getElementById('lightbox-img').src = url;
+    document.getElementById('lightbox-label').textContent = label;
+    openModal('imageLightboxModal');
+};
+
+
+// ── View User Data ────────────────────────────────────────────────────────────
+window.viewUserData = async function(id) {
+    // First check if user exists in pendingUsers array
+    let user = pendingUsers.find(u => u.id === id);
+    
+    // If not found in array, try to fetch from Firestore
+    if (!user) {
+        try {
+            // Try to get from 'users' collection
+            const userDoc = await getDoc(doc(db, 'users', id));
+            if (userDoc.exists()) {
+                user = { id: userDoc.id, ...userDoc.data(), sourceCollection: 'users' };
+            } else {
+                // Try 'verification_requests' collection
+                const verificationDoc = await getDoc(doc(db, 'verification_requests', id));
+                if (verificationDoc.exists()) {
+                    user = { id: verificationDoc.id, ...verificationDoc.data(), sourceCollection: 'verification_requests' };
+                }
+            }
+        } catch (e) {
+            console.error('Error fetching user:', e);
+        }
+    }
+    
+    if (!user) {
+        showToast('User not found', 'error');
+        return;
+    }
+    
+    // Get image URLs using the same helper function
+    function getImageUrl(data, type) {
+        const fieldMappings = {
+            'idFront': ['idFrontUrl', 'id_front_url', 'frontIdUrl', 'front_id_url', 'idImageFront', 'id_image_front', 'id_front', 'idFront', 'idCardFront', 'id_card_front', 'frontIdCard', 'id_card_front_url', 'frontImageUrl', 'front_image_url', 'governmentIdFront', 'government_id_front'],
+            'idBack': ['idBackUrl', 'id_back_url', 'backIdUrl', 'back_id_url', 'idImageBack', 'id_image_back', 'id_back', 'idBack', 'idCardBack', 'id_card_back', 'backIdCard', 'id_card_back_url', 'backImageUrl', 'back_image_url', 'governmentIdBack', 'government_id_back'],
+            'selfie': ['selfieUrl', 'selfie_url', 'selfUrl', 'self_url', 'selfieImage', 'selfie_image', 'selfie', 'selfiePhoto', 'selfiePhotoUrl', 'selfie_photo_url', 'photoUrl', 'photo_url', 'userPhoto', 'user_photo', 'profilePhoto', 'profile_photo', 'verificationSelfie', 'verification_selfie', 'idSelfie', 'id_selfie']
+        };
+        
+        const possibleFields = fieldMappings[type] || [];
+        for (const field of possibleFields) {
+            if (data[field]) return data[field];
+        }
+        
+        // Try to find any field that might contain the image URL
+        for (const key of Object.keys(data)) {
+            if (typeof data[key] === 'string' && data[key].includes('http')) {
+                const keyLower = key.toLowerCase();
+                if (type === 'idFront' && (keyLower.includes('front') || keyLower.includes('id') && !keyLower.includes('back'))) {
+                    return data[key];
+                }
+                if (type === 'idBack' && keyLower.includes('back')) {
+                    return data[key];
+                }
+                if (type === 'selfie' && (keyLower.includes('selfie') || keyLower.includes('photo') || keyLower.includes('image'))) {
+                    return data[key];
+                }
+            }
+        }
+        return null;
+    }
+    
+    const idFrontUrl = getImageUrl(user, 'idFront');
+    const idBackUrl = getImageUrl(user, 'idBack');
+    const selfieUrl = getImageUrl(user, 'selfie');
+    
+    // Build the details HTML
+    let detailsHtml = `
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
+            <div class="modal-field">
+                <label>Full Legal Name</label>
+                <div class="modal-val">${esc(user.fullLegalName || user.fullName || user.name || 'Not provided')}</div>
+            </div>
+            <div class="modal-field">
+                <label>Date of Birth</label>
+                <div class="modal-val">${formatDateOfBirth(user.dateOfBirth || user.dob)}</div>
+            </div>
+            <div class="modal-field" style="grid-column: span 2;">
+                <label>Permanent Address</label>
+                <div class="modal-val">${esc(user.permanentAddress || user.address || user.location || 'Not provided')}</div>
+            </div>
+            <div class="modal-field">
+                <label>ID Type</label>
+                <div class="modal-val">${formatIdType(user.idType || user.id_type)}</div>
+            </div>
+            <div class="modal-field">
+                <label>ID Document Number</label>
+                <div class="modal-val" style="font-family:monospace;">${esc(user.idDocumentNumber || user.id_number || user.idNumber || user.documentNumber || 'Not provided')}</div>
+            </div>
+            <div class="modal-field">
+                <label>Email</label>
+                <div class="modal-val">${esc(user.email || 'Not provided')}</div>
+            </div>
+            <div class="modal-field">
+                <label>Phone</label>
+                <div class="modal-val">${esc(user.phone || 'Not provided')}</div>
+            </div>
+            <div class="modal-field">
+                <label>User Type</label>
+                <div class="modal-val">${esc(user.userType || 'Renter')}</div>
+            </div>
+            <div class="modal-field">
+                <label>Date Submitted</label>
+                <div class="modal-val">${fmtDate(user.createdAt || user.submittedAt || '-')}</div>
+            </div>
+        </div>
+        
+        <h4 style="font-size:13px; font-weight:700; color:var(--text-dark); margin:16px 0 12px; padding-top:16px; border-top:1px solid #e5e7eb;">
+            📋 Verification Documents
+        </h4>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+    `;
+    
+    // ID Front
+    if (idFrontUrl) {
+        detailsHtml += `
+            <div style="cursor:pointer;" onclick="openLightbox('${esc(idFrontUrl)}','ID Front')">
+                <div style="aspect-ratio:4/3; border-radius:8px; overflow:hidden; border:2px solid #e5e7eb; margin-bottom:6px;">
+                    <img src="${esc(idFrontUrl)}" alt="ID Front" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div style="font-size:11px; font-weight:700; text-align:center; color:var(--text-mid);">ID Front</div>
+            </div>
+        `;
+    } else {
+        detailsHtml += `
+            <div style="aspect-ratio:4/3; border-radius:8px; border:2px dashed #e5e7eb; display:flex; align-items:center; justify-content:center; background:#f9fafb;">
+                <div style="font-size:11px; color:#9ca3af; text-align:center;">ID Front<br><span style="font-size:9px;">Not uploaded</span></div>
+            </div>
+        `;
+    }
+    
+    // ID Back
+    if (idBackUrl) {
+        detailsHtml += `
+            <div style="cursor:pointer;" onclick="openLightbox('${esc(idBackUrl)}','ID Back')">
+                <div style="aspect-ratio:4/3; border-radius:8px; overflow:hidden; border:2px solid #e5e7eb; margin-bottom:6px;">
+                    <img src="${esc(idBackUrl)}" alt="ID Back" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div style="font-size:11px; font-weight:700; text-align:center; color:var(--text-mid);">ID Back</div>
+            </div>
+        `;
+    } else {
+        detailsHtml += `
+            <div style="aspect-ratio:4/3; border-radius:8px; border:2px dashed #e5e7eb; display:flex; align-items:center; justify-content:center; background:#f9fafb;">
+                <div style="font-size:11px; color:#9ca3af; text-align:center;">ID Back<br><span style="font-size:9px;">Not uploaded</span></div>
+            </div>
+        `;
+    }
+    
+    // Selfie
+    if (selfieUrl) {
+        detailsHtml += `
+            <div style="cursor:pointer;" onclick="openLightbox('${esc(selfieUrl)}','Selfie')">
+                <div style="aspect-ratio:4/3; border-radius:8px; overflow:hidden; border:2px solid #e5e7eb; margin-bottom:6px;">
+                    <img src="${esc(selfieUrl)}" alt="Selfie" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div style="font-size:11px; font-weight:700; text-align:center; color:var(--text-mid);">Selfie</div>
+            </div>
+        `;
+    } else {
+        detailsHtml += `
+            <div style="aspect-ratio:4/3; border-radius:8px; border:2px dashed #e5e7eb; display:flex; align-items:center; justify-content:center; background:#f9fafb;">
+                <div style="font-size:11px; color:#9ca3af; text-align:center;">Selfie<br><span style="font-size:9px;">Not uploaded</span></div>
+            </div>
+        `;
+    }
+    
+    detailsHtml += `</div>`;
+    
+    // Add all raw data for debugging
+    detailsHtml += `
+        <details style="margin-top:20px; padding-top:16px; border-top:1px solid #e5e7eb;">
+            <summary style="cursor:pointer; font-size:12px; font-weight:700; color:var(--text-light);">🔍 Show All Data (Debug)</summary>
+            <pre style="margin-top:10px; padding:12px; background:#f3f4f6; border-radius:8px; font-size:10px; overflow-x:auto; max-height:200px;">${JSON.stringify(user, null, 2)}</pre>
+        </details>
+    `;
+    
+    document.getElementById('user-view-details-body').innerHTML = detailsHtml;
+    openModal('userViewDetailsModal');
+};
+
+
+// ── Reject User ───────────────────────────────────────────────────────────────
+window.openUserRejectModal = function(id) {
+    document.getElementById('user-rejection-reason').value = '';
+    document.getElementById('user-rejection-id').value = id;
+    openModal('userRejectionModal');
+};
+
+window.confirmRejectUser = async function() {
+    const id     = document.getElementById('user-rejection-id').value;
+    const reason = document.getElementById('user-rejection-reason').value.trim();
+
+    clearFieldState('user-rejection-reason','err-user-rejection-reason');
+    if (!reason) {
+        document.getElementById('err-user-rejection-reason').textContent = 'A rejection reason is required';
+        setFieldError('user-rejection-reason','err-user-rejection-reason', true); return;
+    }
+    if (reason.length < 10) {
+        document.getElementById('err-user-rejection-reason').textContent = 'Please provide more detail (at least 10 characters)';
+        setFieldError('user-rejection-reason','err-user-rejection-reason', true); return;
+    }
+    if (reason.length > 500) {
+        document.getElementById('err-user-rejection-reason').textContent = 'Reason is too long (max 500 characters)';
+        setFieldError('user-rejection-reason','err-user-rejection-reason', true); return;
+    }
+
+    // Find the user to check which collection it's from
+    const user = pendingUsers.find(u => u.id === id);
+    if (!user) {
+        showToast('User not found', 'error');
+        return;
+    }
+
+    try {
+        // Use the sourceCollection property to determine which collection to update
+        if (user.sourceCollection === 'verification_requests' || user.isVerificationRequest) {
+            // It's from verification_requests collection
+            await updateDoc(doc(db, 'verification_requests', id), {
+                status: 'rejected',
+                rejectedAt: new Date().toISOString(),
+                rejectionReason: reason
+            });
+        } else {
+            // It's from users collection
+            await updateDoc(doc(db, 'users', id), {
+                verificationStatus: 'rejected',
+                rejectedAt: new Date().toISOString(),
+                rejectionReason: reason
+            });
+        }
+        
+        showToast('User verification rejected.');
+        closeModal('userRejectionModal');
+        pendingUsers = pendingUsers.filter(u => u.id !== id);
+        document.getElementById('user-pending-count').textContent = pendingUsers.length + ' Pending';
+        updateCombinedApprovalBadge();
+        renderPendingUsers();
+    } catch (e) { console.error(e); showToast('Rejection failed', 'error'); }
+};
+
+// ── Approve User ───────────────────────────────────────────────────────────────
+window.approveUser = async function(id) {
+    // Find the user in pendingUsers array to check if it's from verification_requests or users collection
+    const user = pendingUsers.find(u => u.id === id);
+    if (!user) {
+        showToast('User not found', 'error');
+        return;
+    }
+    
+    try {
+        // Use the sourceCollection property to determine which collection to update
+        if (user.sourceCollection === 'verification_requests' || user.isVerificationRequest) {
+            // It's from verification_requests collection - update that document
+            await updateDoc(doc(db, 'verification_requests', id), {
+                status: 'approved',
+                approvedAt: new Date().toISOString()
+            });
+        } else {
+            // It's from users collection - update the user document
+            await updateDoc(doc(db, 'users', id), {
+                verificationStatus: 'verified',
+                verifiedAt: new Date().toISOString()
+            });
+        }
+        
+        showToast('User verified successfully!');
+        pendingUsers = pendingUsers.filter(u => u.id !== id);
+        document.getElementById('user-pending-count').textContent = pendingUsers.length + ' Pending';
+        updateCombinedApprovalBadge();
+        renderPendingUsers();
+    } catch (e) { 
+        console.error('Approval error:', e); 
+        showToast('Verification failed', 'error'); 
+    }
+};
+
+
+// ── Animated stat counter (FIX: prevent infinite loop) ────────────────────────
+function animateCount(el, target) {
+    // Prevent re-triggering while already animating
+    if (el.dataset.animating === 'true') return;
+    el.dataset.animating = 'true';
+    
+    const start = 0;
+    const duration = 900;
+    const startTime = performance.now();
+    const easeOut = t => 1 - Math.pow(1 - t, 3);
+    function step(now) {
+        const elapsed = Math.min((now - startTime) / duration, 1);
+        el.textContent = Math.round(easeOut(elapsed) * target);
+        if (elapsed < 1) {
+            requestAnimationFrame(step);
+        } else {
+            // Animation complete - reset the flag
+            el.dataset.animating = 'false';
+        }
+    }
+    requestAnimationFrame(step);
+}
+
+// Patch loadDashboardStats to animate counts
+const _origSetStat = (id, val) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.hasAttribute('data-count') && typeof val === 'number') {
+        animateCount(el, val);
+    } else {
+        el.textContent = val;
+    }
+};
+
+// Override stat value setting for animated elements (FIX: simplified - no MutationObserver)
+const _patchStats = () => {
+    // Just set up direct animation calls when data is loaded
+    // No need for MutationObserver which was causing infinite loops
+};
+document.addEventListener('DOMContentLoaded', _patchStats);
+
+// ── Register all public functions with the global bridge ──────────────────
+window.__harvesthubReady({
+    doLogin:               window.doLogin,
+    doLogout:              window.doLogout,
+    doForgotPassword:      window.doForgotPassword,
+    sendPasswordReset:     window.sendPasswordReset,
+    showPage:              window.showPage,
+    toggleProfileMenu:     window.toggleProfileMenu,
+    closeModal:            window.closeModal,
+    closeModalOnOverlay:   window.closeModalOnOverlay,
+    filterBookings:        window.filterBookings,
+    viewBooking:           window.viewBooking,
+    filterHarvesters:      window.filterHarvesters,
+    openNewHarvesterModal: window.openNewHarvesterModal,
+    editHarvester:         window.editHarvester,
+    saveHarvester:         window.saveHarvester,
+    deleteHarvester:       window.deleteHarvester,
+    filterApprovals:       window.filterApprovals,
+    approveHarvester:      window.approveHarvester,
+    openRejectModal:       window.openRejectModal,
+    confirmReject:         window.confirmReject,
+    filterCustomers:       window.filterCustomers,
+    editCustomer:          window.editCustomer,
+    saveCustomer:          window.saveCustomer,
+    saveSettings:          window.saveSettings,
+    resetSettings:         window.resetSettings,
+    toggleApprovalsMenu:   window.toggleApprovalsMenu,
+    showApprovalsTab:      window.showApprovalsTab,
+    filterUserApprovals:   window.filterUserApprovals,
+    approveUser:           window.approveUser,
+    openUserRejectModal:   window.openUserRejectModal,
+    confirmRejectUser:     window.confirmRejectUser,
+    openLightbox:          window.openLightbox,
+    viewUserData:          window.viewUserData,
+    deleteUser:            window.deleteUser,
+    clearLoginFieldError:  window.clearLoginFieldError,
+    toggleNotifDropdown:   window.toggleNotifDropdown,
+    handleNotifClick:      window.handleNotifClick,
+    closeNotifAndGoApprovals: window.closeNotifAndGoApprovals,
+});
+
+</script>
+</body>
+</html>
